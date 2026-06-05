@@ -1,0 +1,13 @@
+server:
+  port: 8761    # Standard Eureka port. All other services will connect here.
+
+spring:
+  application:
+    name: discovery-service   # How this service identifies itself
+
+eureka:
+  client:
+    register-with-eureka: false   # Don't register itself (it IS the registry)
+    fetch-registry: false         # Don't try to fetch the registry from another Eureka
+  server:
+    enable-self-preservation: false   # For development: disable self-preservation mode

@@ -1,0 +1,19 @@
+server:
+  port: 8888    # Standard Config Server port
+
+spring:
+  application:
+    name: config-service
+  profiles:
+    active: native    # "native" = read config from local files (not Git)
+  cloud:
+    config:
+      server:
+        native:
+          # Config files for other services go in this folder
+          search-locations: classpath:/configurations
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/   # Where to find Eureka

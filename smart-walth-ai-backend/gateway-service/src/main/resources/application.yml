@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true              # Auto-discover routes from Eureka
+          lower-case-service-id: true # Access services by lowercase name
+      routes:
+        # Route 1: anything starting with /api/v1/test ? test-service
+        - id: test-service
+          uri: lb://test-service # "lb://" means load-balanced via Eureka
+          predicates:
+            - Path=/api/v1/test/**  # Match this URL pattern
+          filters:
+            # INTERNAL REWRITE: Maps browser '/test' to backend '/api/v1/test'
+            # Smart regex prevents forcing  '/' which causes 404s in Spring Boot 3
+            - RewritePath=/api/v1/test/(?<segment>.*), /api/v1/test/${segment}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+# Better logging to see routing in action
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
