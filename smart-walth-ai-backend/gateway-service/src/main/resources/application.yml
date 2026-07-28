@@ -19,6 +19,28 @@ spring:
             # INTERNAL REWRITE: Maps browser '/test' to backend '/api/v1/test'
             # Smart regex prevents forcing  '/' which causes 404s in Spring Boot 3
             - RewritePath=/api/v1/test/(?<segment>.*), /api/v1/test/${segment}
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+      default-filters:
+        - TokenRelay
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: smartwealth-client
+            client-secret: zieeXjJjpjp6SzKgnVC36GLFbF1HJv9B
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8181/realms/smartwealth-realm
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/smartwealth-realm
+
 eureka:
   client:
     service-url:

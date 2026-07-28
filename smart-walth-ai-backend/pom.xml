@@ -37,6 +37,8 @@
          <module>config-service</module>
          <module>gateway-service</module>
          <module>test-service</module>
+        <module>user-service</module>
+        <module>security-common</module>
     </modules>
 
     <!-- ===== DEPENDENCY MANAGEMENT ===== -->

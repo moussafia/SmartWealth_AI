@@ -1,0 +1,36 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/userdb
+    username: admin
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/smartwealth-realm
+
+# ?? Eureka ??
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      # Where to find the Eureka Server
+  instance:
+    prefer-ip-address: true
+    # Register with IP (192.168.x.x) instead of hostname
+    # Avoids DNS issues in Docker/cloud environments
+
+

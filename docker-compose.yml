@@ -9,7 +9,7 @@ services:
 
   # ─────────────────────────────────────────
   # PostgreSQL for User Service
-  # ─────────────────────────────────────────
+  # ────────────────────────────────a─────────
   # PostgreSQL is a relational database (like MySQL, but more powerful).
   # Each microservice gets its OWN database — this is the
   # "Database-per-Service" pattern. Why? If User Service's DB crashes,
@@ -78,6 +78,63 @@ services:
       # "depends_on" = start postgres-user BEFORE pgadmin.
       # pgAdmin needs the database to exist first.
 
+    # ─────────────────────────────────────────
+    # PostgreSQL for Keycloak
+    # ─────────────────────────────────────────
+    # Keycloak needs its own database to store realms, clients, users,
+    # roles, and sessions. Following the same "database-per-service"
+    # pattern you already used for postgres-user.
+  postgres-keycloak:
+    image: postgres:16-alpine
+    container_name: postgres-keycloak
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak123
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    networks:
+      - smartwealth-net
+    # No "ports" mapping needed here — nothing outside Docker needs to
+    # talk to this DB directly, only Keycloak itself (via the network).
+
+  # ─────────────────────────────────────────
+  # Keycloak — Identity & Access Management
+  # ─────────────────────────────────────────
+  # Keycloak is the "auth server". It issues JWT tokens after login,
+  # stores users/roles, and your microservices trust its tokens instead
+  # of each doing their own login/password checking.
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    container_name: keycloak
+    restart: unless-stopped
+    command: start-dev
+    # "start-dev" = development mode (no HTTPS required, relaxed checks).
+    # For production you'd use "start" with proper certs.
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-keycloak:5432/keycloakdb
+      # Note: "postgres-keycloak" here is the container name from above —
+      # Docker's internal DNS resolves it, same trick you used for pgAdmin.
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak123
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin123
+      # Login for the Keycloak admin console (http://localhost:8181),
+      # NOT a login for your app's end users.
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8181:8080"
+      # We use 8181 on your PC to avoid clashing with any of your
+      # microservices that might already use 8080/8081/etc.
+    depends_on:
+      - postgres-keycloak
+    networks:
+      - smartwealth-net
+
 # ─────────────────────────────────────────
 # Volumes — Where data lives on your hard drive
 # ─────────────────────────────────────────
@@ -85,6 +142,7 @@ services:
 # Even if you delete the container, the volume keeps the data.
 volumes:
   user-db-data:
+  keycloak-db-data:
   # This creates a named volume called "user-db-data".
   # Docker stores it somewhere on your PC (you don't need to know where).
   # To delete it: "docker volume rm smart-walth-ai_user-db-data"

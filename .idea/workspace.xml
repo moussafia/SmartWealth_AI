@@ -5,7 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9821130-869d-4906-ab41-6b5b972d1db3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/smart-walth-ai.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/user-service/src/main/java/ma/enset/userservice/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/user-service/src/main/java/ma/enset/userservice/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/user-service/src/main/java/ma/enset/userservice/enums/KycStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/user-service/src/main/java/ma/enset/userservice/enums/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/user-service/src/main/java/ma/enset/userservice/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/main/java/ma/enset/testservice/TestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/main/java/ma/enset/testservice/TestServiceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/test/java/ma/enset/testservice/TestServiceApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,20 +49,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/STATE/Desktop/smart-walth-ai",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/STATE/Desktop/spring-angular-keycloak-master-IIBDCC-main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\STATE\Desktop\smart-walth-ai" />
@@ -60,7 +85,11 @@
       <option name="presentableId" value="Default" />
       <updated>1780685126192</updated>
       <workItem from="1780685129186" duration="94000" />
-      <workItem from="1780860667345" duration="1111000" />
+      <workItem from="1780860667345" duration="2957000" />
+      <workItem from="1782678042940" duration="2029000" />
+      <workItem from="1783430687164" duration="3524000" />
+      <workItem from="1784381581994" duration="1535000" />
+      <workItem from="1785079504731" duration="4786000" />
     </task>
     <servers />
   </component>
