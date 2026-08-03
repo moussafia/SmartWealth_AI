@@ -15,7 +15,10 @@ public class GatewaySecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/api/users/register").permitAll()
+                        .pathMatchers("/api/auth/**").permitAll()
                         .pathMatchers("/api/public/**").permitAll()
                         .anyExchange().authenticated()
                 )

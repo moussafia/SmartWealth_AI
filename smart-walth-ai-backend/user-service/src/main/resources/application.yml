@@ -22,7 +22,14 @@ spring:
         jwt:
           issuer-uri: http://localhost:8181/realms/smartwealth-realm
 
-# ?? Eureka ??
+keycloak:
+  admin:
+    server-url: http://localhost:8181
+    realm: smartwealth-realm
+    client-id: user-service-admin
+    client-secret: EAue6iiHmLfz0Vs90CllCeIgRCf7YkOy
+
+
 eureka:
   client:
     service-url:
