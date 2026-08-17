@@ -1,0 +1,72 @@
+<app-modal
+  [title]="(isEdit() ? 'portfolio.editAsset' : 'portfolio.addAsset') | translate"
+  [subtitle]="'portfolio.assetFormSub' | translate"
+  [closeLabel]="'common.cancel' | translate"
+  (dismissed)="cancel.emit()"
+>
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+    <app-form-field
+      class="form-grid__full"
+      for="a-wallet"
+      [label]="'common.wallet' | translate"
+      [control]="form.controls.walletId"
+    >
+      <select id="a-wallet" formControlName="walletId">
+        @for (wallet of wallets(); track wallet.id) {
+          <option [value]="wallet.id">{{ wallet.name }}</option>
+        }
+      </select>
+    </app-form-field>
+
+    <app-form-field
+      for="a-symbol"
+      [label]="'common.symbol' | translate"
+      [control]="form.controls.symbol"
+      [hint]="'portfolio.symbolHint' | translate"
+    >
+      <input id="a-symbol" type="text" formControlName="symbol" autocomplete="off" />
+    </app-form-field>
+
+    <app-form-field for="a-name" [label]="'common.asset' | translate" [control]="form.controls.name">
+      <input id="a-name" type="text" formControlName="name" autocomplete="off" />
+    </app-form-field>
+
+    <app-form-field
+      for="a-quantity"
+      [label]="'common.quantity' | translate"
+      [control]="form.controls.quantity"
+    >
+      <input id="a-quantity" type="number" min="0" step="0.000001" formControlName="quantity" />
+    </app-form-field>
+
+    <app-form-field
+      for="a-avg"
+      [label]="'common.avgPrice' | translate"
+      [control]="form.controls.avgBuyPrice"
+    >
+      <input id="a-avg" type="number" min="0" step="0.01" formControlName="avgBuyPrice" />
+    </app-form-field>
+
+    <app-form-field
+      class="form-grid__full"
+      for="a-current"
+      [label]="'common.currentPrice' | translate"
+      [control]="form.controls.currentPrice"
+      [optional]="true"
+      [hint]="'portfolio.currentPriceHint' | translate"
+    >
+      <input id="a-current" type="number" min="0" step="0.01" formControlName="currentPrice" />
+    </app-form-field>
+  </form>
+
+  @if (errorKey()) {
+    <span class="form-error" role="alert">{{ errorKey() | translate }}</span>
+  }
+
+  <button type="button" class="btn" modalActions (click)="cancel.emit()">
+    {{ 'common.cancel' | translate }}
+  </button>
+  <button type="button" class="btn btn--primary" modalActions (click)="submit()">
+    {{ (isEdit() ? 'common.save' : 'common.add') | translate }}
+  </button>
+</app-modal>

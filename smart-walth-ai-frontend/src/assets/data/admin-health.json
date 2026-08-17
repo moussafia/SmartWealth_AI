@@ -1,0 +1,141 @@
+{
+  "generatedAt": "2026-08-08T16:55:00Z",
+  "services": [
+    {
+      "id": "user-service",
+      "name": "User Service",
+      "responsibility": "Authentification, JWT, profils, RBAC, KYC",
+      "database": "PostgreSQL",
+      "port": 8081,
+      "status": "UP",
+      "instances": 2,
+      "uptimePercent": 99.98,
+      "avgLatencyMs": 38,
+      "liveness": "PASS",
+      "readiness": "PASS"
+    },
+    {
+      "id": "portfolio-service",
+      "name": "Portfolio Service",
+      "responsibility": "Wallets, actifs, valorisation, score de risque",
+      "database": "PostgreSQL",
+      "port": 8082,
+      "status": "UP",
+      "instances": 3,
+      "uptimePercent": 99.94,
+      "avgLatencyMs": 61,
+      "liveness": "PASS",
+      "readiness": "PASS"
+    },
+    {
+      "id": "transaction-service",
+      "name": "Transaction Service",
+      "responsibility": "Dépôts, retraits, achats/ventes, détection anomalies",
+      "database": "PostgreSQL",
+      "port": 8083,
+      "status": "DEGRADED",
+      "instances": 2,
+      "uptimePercent": 99.41,
+      "avgLatencyMs": 148,
+      "liveness": "PASS",
+      "readiness": "FAIL"
+    },
+    {
+      "id": "notification-service",
+      "name": "Notification Service",
+      "responsibility": "Email, push, alertes événementielles (stateless)",
+      "database": null,
+      "port": 8084,
+      "status": "UP",
+      "instances": 2,
+      "uptimePercent": 99.99,
+      "avgLatencyMs": 22,
+      "liveness": "PASS",
+      "readiness": "PASS"
+    },
+    {
+      "id": "ai-advisor-service",
+      "name": "AI Advisor Service",
+      "responsibility": "Agent LLM, RAG, mémoire, rapports automatiques",
+      "database": "Vector Store",
+      "port": 8085,
+      "status": "UP",
+      "instances": 1,
+      "uptimePercent": 99.12,
+      "avgLatencyMs": 3140,
+      "liveness": "PASS",
+      "readiness": "PASS"
+    }
+  ],
+  "infrastructure": [
+    {
+      "id": "api-gateway",
+      "name": "API Gateway",
+      "technology": "Spring Cloud Gateway",
+      "role": "Point d'entrée unique, routage, rate limiting",
+      "status": "UP"
+    },
+    {
+      "id": "service-discovery",
+      "name": "Service Discovery",
+      "technology": "Eureka Server",
+      "role": "Registre et découverte des services",
+      "status": "UP"
+    },
+    {
+      "id": "config-server",
+      "name": "Config Server",
+      "technology": "Spring Cloud Config",
+      "role": "Configuration centralisée",
+      "status": "UP"
+    },
+    {
+      "id": "message-broker",
+      "name": "Message Broker",
+      "technology": "Apache Kafka",
+      "role": "Communication asynchrone event-driven",
+      "status": "UP"
+    },
+    {
+      "id": "orchestration",
+      "name": "Orchestration",
+      "technology": "Kubernetes + Helm",
+      "role": "Déploiement production-ready",
+      "status": "UP"
+    }
+  ],
+  "kafkaTopics": [
+    {
+      "name": "user-events",
+      "producer": "User Service",
+      "consumers": ["Portfolio Service", "Notification Service"],
+      "consumerLag": 0,
+      "messagesPerMinute": 4,
+      "deadLetterCount": 0
+    },
+    {
+      "name": "transaction-events",
+      "producer": "Transaction Service",
+      "consumers": ["Portfolio Service", "Notification Service", "AI Advisor Service"],
+      "consumerLag": 27,
+      "messagesPerMinute": 138,
+      "deadLetterCount": 1
+    },
+    {
+      "name": "portfolio-events",
+      "producer": "Portfolio Service",
+      "consumers": ["Notification Service", "AI Advisor Service"],
+      "consumerLag": 3,
+      "messagesPerMinute": 96,
+      "deadLetterCount": 0
+    },
+    {
+      "name": "alert-events",
+      "producer": "AI Advisor Service",
+      "consumers": ["Notification Service"],
+      "consumerLag": 0,
+      "messagesPerMinute": 11,
+      "deadLetterCount": 0
+    }
+  ]
+}

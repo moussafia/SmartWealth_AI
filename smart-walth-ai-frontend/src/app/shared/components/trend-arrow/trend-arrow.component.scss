@@ -1,0 +1,16 @@
+.arrow {
+  font-size: var(--font-size-xs);
+  line-height: 1;
+
+  &.up {
+    color: var(--color-positive);
+  }
+
+  &.down {
+    color: var(--color-negative);
+  }
+
+  &.flat {
+    color: var(--color-neutral);
+  }
+}

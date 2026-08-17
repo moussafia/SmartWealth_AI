@@ -1,0 +1,52 @@
+{
+  "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "currency": "USD",
+  "totalValue": 121145.05,
+  "cashBalance": 22390.0,
+  "investedValue": 98755.05,
+  "costBasis": 87541.5,
+  "totalGainLoss": 11213.55,
+  "totalGainLossPercent": 12.81,
+  "dayChange": 842.3,
+  "dayChangePercent": 0.7,
+  "walletCount": 3,
+  "assetCount": 6,
+  "riskScore": 64,
+  "riskLevel": "MODERATE",
+  "updatedAt": "2026-08-08T16:52:00Z",
+  "allocationByType": [
+    { "type": "STOCKS", "value": 63775.0, "percentage": 52.64 },
+    { "type": "CRYPTO", "value": 38870.05, "percentage": 32.08 },
+    { "type": "SAVINGS", "value": 18500.0, "percentage": 15.27 }
+  ],
+  "allocationByAsset": [
+    { "symbol": "BTC", "name": "Bitcoin", "value": 28534.8, "percentage": 23.55 },
+    { "symbol": "AAPL", "name": "Apple Inc.", "value": 27342.0, "percentage": 22.57 },
+    { "symbol": "MSFT", "name": "Microsoft Corporation", "value": 18837.0, "percentage": 15.55 },
+    { "symbol": "ETH", "name": "Ethereum", "value": 9695.25, "percentage": 8.0 },
+    { "symbol": "VTI", "name": "Vanguard Total Stock Market ETF", "value": 8052.0, "percentage": 6.65 },
+    { "symbol": "NVDA", "name": "NVIDIA Corporation", "value": 6294.0, "percentage": 5.19 }
+  ],
+  "valueHistory": [
+    { "date": "2025-09-01", "value": 96400.0 },
+    { "date": "2025-10-01", "value": 99820.5 },
+    { "date": "2025-11-01", "value": 98145.2 },
+    { "date": "2025-12-01", "value": 104310.75 },
+    { "date": "2026-01-01", "value": 101987.4 },
+    { "date": "2026-02-01", "value": 108662.3 },
+    { "date": "2026-03-01", "value": 112405.85 },
+    { "date": "2026-04-01", "value": 109220.6 },
+    { "date": "2026-05-01", "value": 114980.15 },
+    { "date": "2026-06-01", "value": 118340.9 },
+    { "date": "2026-07-01", "value": 116725.45 },
+    { "date": "2026-08-01", "value": 121145.05 }
+  ],
+  "assetPerformance": [
+    { "symbol": "AAPL", "gainLoss": 7134.0, "gainLossPercent": 35.3 },
+    { "symbol": "BTC", "gainLoss": 4090.8, "gainLossPercent": 16.74 },
+    { "symbol": "MSFT", "gainLoss": 2092.5, "gainLossPercent": 12.5 },
+    { "symbol": "VTI", "gainLoss": 702.0, "gainLossPercent": 9.55 },
+    { "symbol": "NVDA", "gainLoss": -801.0, "gainLossPercent": -11.29 },
+    { "symbol": "ETH", "gainLoss": -2004.75, "gainLossPercent": -17.14 }
+  ]
+}

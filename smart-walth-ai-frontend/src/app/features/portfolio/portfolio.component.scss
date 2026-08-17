@@ -1,0 +1,127 @@
+@use 'styles/mixins' as m;
+
+.stamp {
+  @include m.numeric;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.risk {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.risk__score {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.risk__value {
+  @include m.numeric;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.risk__max {
+  font-size: var(--font-size-md);
+  color: var(--color-text-muted);
+}
+
+.risk__stats,
+.wallet__stats {
+  display: grid;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+
+  div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    border-bottom: 1px dashed var(--color-border);
+    padding-bottom: var(--space-1);
+  }
+
+  dt {
+    @include m.label;
+    font-size: var(--font-size-xs);
+  }
+
+  dd {
+    @include m.numeric;
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+  }
+}
+
+.wallet__stats {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4) 0;
+
+  div {
+    flex: 1 1 200px;
+  }
+}
+
+.wallet__delta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wallet__empty {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.wallets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  .field {
+    min-width: 240px;
+  }
+}
+
+.switcher__meta {
+  @include m.numeric;
+  margin: 0;
+  padding-bottom: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.sym {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-semibold);
+}
+
+@media (max-width: 1000px) {
+  .risk {
+    grid-template-columns: 1fr;
+  }
+}

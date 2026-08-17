@@ -1,0 +1,97 @@
+<div class="login">
+  <div class="login__toggles">
+    <button type="button" class="btn" (click)="toggleLanguage()">
+      {{ language() === 'fr' ? 'FR' : 'EN' }}
+    </button>
+    <button
+      type="button"
+      class="btn"
+      [attr.aria-label]="(isDark() ? 'shell.theme.light' : 'shell.theme.dark') | translate"
+      (click)="toggleTheme()"
+    >
+      <app-icon [name]="isDark() ? 'sun' : 'moon'" />
+    </button>
+  </div>
+
+  <section class="panel">
+    <div class="panel__brand">
+      <span class="panel__mark">SW</span>
+      <div>
+        <strong>{{ 'app.name' | translate }}</strong>
+        <small>{{ 'app.tagline' | translate }}</small>
+      </div>
+    </div>
+
+    <div class="panel__head">
+      <h1>{{ (registering() ? 'login.registerTitle' : 'login.title') | translate }}</h1>
+      <p class="muted">
+        {{ (registering() ? 'login.registerSubtitle' : 'login.subtitle') | translate }}
+      </p>
+    </div>
+
+    <form class="panel__form" [formGroup]="form" (ngSubmit)="submit()">
+      @if (registering()) {
+        <app-form-field
+          for="first-name"
+          [label]="'profile.firstName' | translate"
+          [control]="form.controls.firstName"
+        >
+          <input id="first-name" type="text" formControlName="firstName" autocomplete="given-name" />
+        </app-form-field>
+
+        <app-form-field
+          for="last-name"
+          [label]="'profile.lastName' | translate"
+          [control]="form.controls.lastName"
+        >
+          <input id="last-name" type="text" formControlName="lastName" autocomplete="family-name" />
+        </app-form-field>
+      }
+
+      <app-form-field for="email" [label]="'login.email' | translate" [control]="form.controls.email">
+        <input id="email" type="email" formControlName="email" autocomplete="email" />
+      </app-form-field>
+
+      <app-form-field
+        for="password"
+        [label]="'login.password' | translate"
+        [control]="form.controls.password"
+        [hint]="'login.passwordHint' | translate"
+      >
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [attr.autocomplete]="registering() ? 'new-password' : 'current-password'"
+        />
+      </app-form-field>
+
+      @if (registering()) {
+        <app-form-field
+          for="confirm"
+          [label]="'login.confirmPassword' | translate"
+          [control]="form.controls.confirm"
+        >
+          <input id="confirm" type="password" formControlName="confirm" autocomplete="new-password" />
+        </app-form-field>
+      }
+
+      @if (submitError()) {
+        <span class="form-error" role="alert">{{ submitError() | translate }}</span>
+      }
+
+      <button type="submit" class="btn btn--primary panel__submit">
+        {{ (registering() ? 'login.registerSubmit' : 'login.submit') | translate }}
+      </button>
+
+      <button type="button" class="panel__secondary" (click)="toggleMode()">
+        {{ (registering() ? 'login.haveAccount' : 'login.register') | translate }}
+      </button>
+    </form>
+
+    <footer class="panel__notice">
+      <app-status-chip tone="info">{{ 'login.demoBadge' | translate }}</app-status-chip>
+      <p>{{ 'login.demoNotice' | translate }}</p>
+    </footer>
+  </section>
+</div>

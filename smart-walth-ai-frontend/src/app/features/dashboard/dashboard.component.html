@@ -1,0 +1,241 @@
+<div class="page">
+  <app-page-header
+    [title]="'dashboard.title' | translate"
+    [subtitle]="'dashboard.subtitle' | translate"
+  >
+    <div class="toolbar">
+      <span class="stamp">{{ 'common.updated' | translate }} {{ when(summary().updatedAt) }}</span>
+      <button type="button" class="btn" (click)="refreshPrices()">
+        {{ 'portfolio.refreshPrices' | translate }}
+      </button>
+      <button type="button" class="btn btn--primary" (click)="goToTransactions()">
+        {{ 'transactions.newTransaction' | translate }}
+      </button>
+    </div>
+  </app-page-header>
+
+  <section class="tiles">
+    <app-metric-tile [label]="'dashboard.totalValue' | translate" [accent]="true" [live]="true">
+      <app-amount [value]="summary().totalValue" [currency]="summary().currency" />
+      <span tileMeta>
+        {{ summary().walletCount }} {{ 'dashboard.wallets' | translate }} ·
+        {{ summary().assetCount }} {{ 'dashboard.assets' | translate }}
+      </span>
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'dashboard.dayChange' | translate" [live]="true">
+      <app-amount
+        [value]="summary().dayChange"
+        [currency]="summary().currency"
+        [signed]="true"
+      />
+      <app-delta-chip tileMeta [value]="summary().dayChangePercent" />
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'dashboard.gainLoss' | translate">
+      <app-amount
+        [value]="summary().totalGainLoss"
+        [currency]="summary().currency"
+        [signed]="true"
+      />
+      <app-delta-chip tileMeta [value]="summary().totalGainLossPercent" />
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'dashboard.cash' | translate">
+      <app-amount [value]="summary().cashBalance" [currency]="summary().currency" />
+      <span tileMeta>
+        {{ 'common.invested' | translate }}
+        <app-amount [value]="summary().investedValue" [currency]="summary().currency" />
+      </span>
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'dashboard.riskScore' | translate">
+      {{ summary().riskScore }}<span class="tile__max">/100</span>
+      <span tileMeta class="tile__risk">
+        <app-status-chip [tone]="riskLevelTone(summary().riskLevel)">
+          {{ 'riskLevel.' + summary().riskLevel | translate }}
+        </app-status-chip>
+        <app-score-bar
+          [value]="summary().riskScore"
+          [tone]="
+            summary().riskScore >= 70
+              ? 'negative'
+              : summary().riskScore >= 40
+                ? 'warning'
+                : 'positive'
+          "
+          [label]="'dashboard.riskScore' | translate"
+        />
+      </span>
+    </app-metric-tile>
+  </section>
+
+  <section class="charts">
+    <app-card
+      class="charts__wide"
+      [heading]="'dashboard.evolution' | translate"
+      [subheading]="'dashboard.evolutionSub' | translate"
+    >
+      <div class="range" cardActions role="group" [attr.aria-label]="'dashboard.range' | translate">
+        @for (months of ranges; track months) {
+          <button
+            type="button"
+            class="range__btn"
+            [class.range__btn--active]="range() === months"
+            [attr.aria-pressed]="range() === months"
+            (click)="setRange(months)"
+          >
+            {{ 'dashboard.rangeMonths' | translate: { count: months } }}
+          </button>
+        }
+      </div>
+
+      <app-chart
+        kind="line"
+        valueFormat="money"
+        height="240px"
+        [labels]="evolutionLabels()"
+        [series]="evolutionSeries()"
+        [currency]="summary().currency"
+        [ariaLabel]="'dashboard.evolution' | translate"
+      />
+    </app-card>
+
+    <app-card
+      [heading]="'dashboard.allocation' | translate"
+      [subheading]="'dashboard.allocationSub' | translate"
+    >
+      <app-chart
+        kind="doughnut"
+        valueFormat="percent"
+        height="240px"
+        [labels]="allocationLabels()"
+        [series]="allocationSeries()"
+        [showLegend]="true"
+        [ariaLabel]="'dashboard.allocation' | translate"
+      />
+    </app-card>
+  </section>
+
+  <section class="trio">
+    <app-card
+      [heading]="'dashboard.performance' | translate"
+      [subheading]="'dashboard.performanceSub' | translate"
+    >
+      <app-chart
+        kind="bar"
+        valueFormat="percent"
+        height="220px"
+        [labels]="performanceLabels()"
+        [series]="performanceSeries()"
+        [beginAtZero]="true"
+        [ariaLabel]="'dashboard.performance' | translate"
+      />
+    </app-card>
+
+    <app-card [heading]="'dashboard.alerts' | translate" [subheading]="'dashboard.alertsSub' | translate">
+      <button type="button" class="btn btn--sm btn--ghost" cardActions (click)="goToAdvisor()">
+        {{ 'dashboard.seeAdvisor' | translate }}
+      </button>
+
+      <ul class="alerts" aria-live="polite">
+        @for (alert of activeAlerts(); track alert.id) {
+          <li class="alert">
+            <div class="alert__head">
+              <app-status-chip [tone]="priorityTone(alert.severity)">
+                {{ 'alertType.' + alert.type | translate }}
+              </app-status-chip>
+              <span class="stamp">{{ when(alert.createdAt) }}</span>
+            </div>
+            <strong>{{ alert.title }}</strong>
+            <p class="muted">{{ alert.message }}</p>
+            <button
+              type="button"
+              class="btn btn--sm btn--ghost"
+              (click)="acknowledge(alert.id)"
+            >
+              {{ 'advisor.acknowledge' | translate }}
+            </button>
+          </li>
+        } @empty {
+          <li class="muted">{{ 'advisor.noActiveAlerts' | translate }}</li>
+        }
+      </ul>
+    </app-card>
+
+    <app-card [heading]="'dashboard.feed' | translate" [subheading]="'dashboard.feedSub' | translate">
+      <ul class="feed" aria-live="polite">
+        @for (item of latestNotifications(); track item.id) {
+          <li class="feed__item" [class.feed__item--unread]="!item.read">
+            <div class="feed__top">
+              <app-status-chip [tone]="severityTone(item.severity)">
+                {{ 'eventType.' + item.eventType | translate }}
+              </app-status-chip>
+              <span class="stamp">{{ when(item.createdAt) }}</span>
+            </div>
+            <strong>{{ item.title }}</strong>
+            <p class="muted">{{ item.message }}</p>
+            @if (!item.read) {
+              <button type="button" class="btn btn--sm btn--ghost" (click)="markRead(item.id)">
+                {{ 'feed.markRead' | translate }}
+              </button>
+            }
+          </li>
+        } @empty {
+          <li class="muted">{{ 'feed.empty' | translate }}</li>
+        }
+      </ul>
+    </app-card>
+  </section>
+
+  <app-card
+    [flush]="true"
+    [heading]="'dashboard.recentTransactions' | translate"
+    [subheading]="'dashboard.recentTransactionsSub' | translate"
+  >
+    <button type="button" class="btn btn--sm btn--ghost" cardActions (click)="goToTransactions()">
+      {{ 'dashboard.seeAll' | translate }}
+    </button>
+
+    <app-data-table>
+      <table>
+        <thead>
+          <tr>
+            <th>{{ 'common.date' | translate }}</th>
+            <th>{{ 'common.type' | translate }}</th>
+            <th>{{ 'common.wallet' | translate }}</th>
+            <th>{{ 'common.asset' | translate }}</th>
+            <th class="num">{{ 'common.amount' | translate }}</th>
+            <th>{{ 'common.status' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody aria-live="polite">
+          @for (tx of recentTransactions(); track tx.id) {
+            <tr>
+              <td class="num">{{ when(tx.createdAt) }}</td>
+              <td>
+                <app-status-chip [tone]="typeTone(tx.type)">
+                  {{ 'txType.' + tx.type | translate }}
+                </app-status-chip>
+              </td>
+              <td>{{ walletName(tx.walletId) }}</td>
+              <td class="sym">{{ tx.assetSymbol ?? ('common.none' | translate) }}</td>
+              <td class="num">
+                <app-amount [value]="tx.amount" [currency]="summary().currency" />
+              </td>
+              <td>
+                <app-status-chip [tone]="statusTone(tx.status)">
+                  {{ 'txStatus.' + tx.status | translate }}
+                </app-status-chip>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="empty" colspan="6">{{ 'common.noResults' | translate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </app-data-table>
+  </app-card>
+</div>

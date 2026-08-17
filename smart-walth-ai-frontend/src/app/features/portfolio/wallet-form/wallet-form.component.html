@@ -1,0 +1,58 @@
+<app-modal
+  [title]="(isEdit() ? 'portfolio.editWallet' : 'portfolio.addWallet') | translate"
+  [subtitle]="'portfolio.walletFormSub' | translate"
+  [closeLabel]="'common.cancel' | translate"
+  (dismissed)="cancel.emit()"
+>
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+    <app-form-field
+      class="form-grid__full"
+      for="w-name"
+      [label]="'common.name' | translate"
+      [control]="form.controls.name"
+    >
+      <input id="w-name" type="text" formControlName="name" autocomplete="off" />
+    </app-form-field>
+
+    <app-form-field for="w-type" [label]="'common.type' | translate" [control]="form.controls.type">
+      <select id="w-type" formControlName="type">
+        @for (type of types; track type) {
+          <option [value]="type">{{ 'walletType.' + type | translate }}</option>
+        }
+      </select>
+    </app-form-field>
+
+    <app-form-field
+      for="w-currency"
+      [label]="'common.currency' | translate"
+      [control]="form.controls.currency"
+    >
+      <select id="w-currency" formControlName="currency">
+        @for (currency of currencies; track currency) {
+          <option [value]="currency">{{ currency }}</option>
+        }
+      </select>
+    </app-form-field>
+
+    <app-form-field
+      class="form-grid__full"
+      for="w-balance"
+      [label]="'common.cash' | translate"
+      [control]="form.controls.balance"
+      [hint]="'portfolio.balanceHint' | translate"
+    >
+      <input id="w-balance" type="number" min="0" step="10" formControlName="balance" />
+    </app-form-field>
+  </form>
+
+  @if (errorKey()) {
+    <span class="form-error" role="alert">{{ errorKey() | translate }}</span>
+  }
+
+  <button type="button" class="btn" modalActions (click)="cancel.emit()">
+    {{ 'common.cancel' | translate }}
+  </button>
+  <button type="button" class="btn btn--primary" modalActions (click)="submit()">
+    {{ (isEdit() ? 'common.save' : 'common.create') | translate }}
+  </button>
+</app-modal>

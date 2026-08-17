@@ -1,0 +1,74 @@
+{
+  "sessionId": "9d8c7b6a-5e4f-4a3b-9c2d-1e0f9a8b7c6d",
+  "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "startedAt": "2026-08-08T16:10:00Z",
+  "memoryTurns": 4,
+  "messages": [
+    {
+      "id": "m-001",
+      "role": "USER",
+      "content": "Bonjour, peux-tu me donner un aperçu rapide de mon patrimoine ?",
+      "createdAt": "2026-08-08T16:10:04Z",
+      "toolCalls": []
+    },
+    {
+      "id": "m-002",
+      "role": "AGENT",
+      "content": "Votre patrimoine total s'élève à 121 145,05 USD, réparti sur 3 wallets et 6 actifs. La plus-value latente est de +11 213,55 USD (+12,81 %). Vous détenez 22 390,00 USD de liquidités, dont 18 500,00 USD sur votre wallet d'épargne.",
+      "createdAt": "2026-08-08T16:10:09Z",
+      "toolCalls": [{ "tool": "get_portfolio", "status": "DONE", "durationMs": 214 }]
+    },
+    {
+      "id": "m-003",
+      "role": "USER",
+      "content": "Mon portefeuille est-il bien diversifié ?",
+      "createdAt": "2026-08-08T16:11:32Z",
+      "toolCalls": []
+    },
+    {
+      "id": "m-004",
+      "role": "AGENT",
+      "content": "Partiellement. Vos actions représentent 52,64 % et votre épargne 15,27 %, ce qui est équilibré. En revanche votre exposition crypto atteint 32,08 % du patrimoine, contre un seuil recommandé de 20 %. Aucune position individuelle ne dépasse le seuil critique de 50 % (la plus élevée est BTC à 23,55 %), mais six positions dépassent la règle des 5 % par ligne.",
+      "createdAt": "2026-08-08T16:11:41Z",
+      "toolCalls": [
+        { "tool": "get_portfolio", "status": "DONE", "durationMs": 198 },
+        { "tool": "calculate_risk_score", "status": "DONE", "durationMs": 331 },
+        { "tool": "search_financial_knowledge", "status": "DONE", "durationMs": 412 }
+      ]
+    },
+    {
+      "id": "m-005",
+      "role": "USER",
+      "content": "Et mes dépenses du mois dernier, rien d'anormal ?",
+      "createdAt": "2026-08-08T16:13:05Z",
+      "toolCalls": []
+    },
+    {
+      "id": "m-006",
+      "role": "AGENT",
+      "content": "Une transaction sort du lot : un retrait de 12 500,00 USD le 6 août depuis votre wallet d'épargne. Son montant dépasse de plus de 3 écarts-types la moyenne de vos retraits (487,50 USD sur 30 jours). J'ai également noté un échec d'achat NVDA le 3 août pour solde insuffisant, routé vers le dead letter topic.",
+      "createdAt": "2026-08-08T16:13:14Z",
+      "toolCalls": [
+        { "tool": "get_transaction_history", "status": "DONE", "durationMs": 276 },
+        { "tool": "detect_anomalies", "status": "DONE", "durationMs": 189 }
+      ]
+    },
+    {
+      "id": "m-007",
+      "role": "USER",
+      "content": "Que me conseilles-tu concrètement ?",
+      "createdAt": "2026-08-08T16:14:20Z",
+      "toolCalls": []
+    },
+    {
+      "id": "m-008",
+      "role": "AGENT",
+      "content": "Trois actions prioritaires : 1) ramener l'exposition crypto sous 20 % en allégeant BTC d'environ 14 600 USD ; 2) confirmer que le retrait de 12 500 USD était volontaire ; 3) votre fonds d'urgence couvre 4,2 mois de dépenses, ce qui est dans la fourchette recommandée de 3 à 6 mois — inutile de l'augmenter pour l'instant.",
+      "createdAt": "2026-08-08T16:14:33Z",
+      "toolCalls": [
+        { "tool": "search_financial_knowledge", "status": "DONE", "durationMs": 358 },
+        { "tool": "generate_health_report", "status": "DONE", "durationMs": 1204 }
+      ]
+    }
+  ]
+}

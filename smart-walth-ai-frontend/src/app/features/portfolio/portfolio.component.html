@@ -1,0 +1,352 @@
+<div class="page">
+  <app-page-header
+    [title]="'portfolio.title' | translate"
+    [subtitle]="'portfolio.subtitle' | translate"
+  >
+    <div class="toolbar">
+      <span class="stamp">{{ 'common.updated' | translate }} {{ when(summary().updatedAt) }}</span>
+      <button type="button" class="btn" (click)="refreshPrices()">
+        {{ 'portfolio.refreshPrices' | translate }}
+      </button>
+      <button type="button" class="btn btn--primary" (click)="openWalletForm(null)">
+        {{ 'portfolio.addWallet' | translate }}
+      </button>
+    </div>
+  </app-page-header>
+
+  <section class="tiles">
+    <app-metric-tile [label]="'dashboard.totalValue' | translate" [live]="true">
+      <app-amount [value]="summary().totalValue" [currency]="summary().currency" />
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'common.invested' | translate">
+      <app-amount [value]="summary().investedValue" [currency]="summary().currency" />
+      <app-delta-chip tileMeta [value]="summary().totalGainLossPercent" />
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'portfolio.totalCash' | translate">
+      <app-amount [value]="summary().cashBalance" [currency]="summary().currency" />
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'common.costBasis' | translate">
+      <app-amount [value]="summary().costBasis" [currency]="summary().currency" />
+      <span tileMeta>
+        <app-amount
+          [value]="summary().totalGainLoss"
+          [currency]="summary().currency"
+          [signed]="true"
+        />
+      </span>
+    </app-metric-tile>
+  </section>
+
+  <app-card [heading]="'portfolio.risk' | translate" [subheading]="'portfolio.riskSub' | translate">
+    <div class="risk">
+      <div class="risk__score">
+        <div class="risk__value">
+          {{ risk().overallScore }}<span class="risk__max">/100</span>
+          <app-status-chip [tone]="riskLevelTone(risk().level)">
+            {{ 'riskLevel.' + risk().level | translate }}
+          </app-status-chip>
+        </div>
+        <app-score-bar
+          [value]="risk().overallScore"
+          [tone]="riskTone()"
+          [label]="'portfolio.risk' | translate"
+        />
+      </div>
+
+      <dl class="risk__stats">
+        <div>
+          <dt>{{ 'portfolio.concentration' | translate }}</dt>
+          <dd>{{ risk().concentrationScore }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'portfolio.volatilityScore' | translate }}</dt>
+          <dd>{{ risk().volatilityScore }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'portfolio.sharpe' | translate }}</dt>
+          <dd>{{ risk().sharpeRatio }}</dd>
+        </div>
+      </dl>
+
+      <dl class="risk__stats risk__stats--thresholds">
+        <div>
+          <dt>{{ 'portfolio.thresholdSingle' | translate }}</dt>
+          <dd>{{ percent(risk().thresholds.singleAssetMaxPercent) }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'portfolio.thresholdCrypto' | translate }}</dt>
+          <dd>{{ percent(risk().thresholds.cryptoMaxPercent) }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'portfolio.thresholdRule' | translate }}</dt>
+          <dd>{{ percent(risk().thresholds.singlePositionRulePercent) }}</dd>
+        </div>
+      </dl>
+    </div>
+  </app-card>
+
+  <section class="wallets">
+    @if (wallets().length) {
+      <div class="switcher">
+        <div class="field">
+          <label for="wallet-picker">{{ 'portfolio.selectWallet' | translate }}</label>
+          <select
+            id="wallet-picker"
+            [value]="selected()?.id ?? ''"
+            (change)="selectWallet($event)"
+          >
+            @for (wallet of wallets(); track wallet.id) {
+              <option [value]="wallet.id">
+                {{ wallet.name }} · {{ 'walletType.' + wallet.type | translate }}
+              </option>
+            }
+          </select>
+        </div>
+        <p class="switcher__meta">
+          {{ 'portfolio.walletCount' | translate: { count: wallets().length } }}
+        </p>
+      </div>
+    }
+
+    @if (selected(); as wallet) {
+      <app-card
+        [flush]="true"
+        [heading]="wallet.name"
+        [subheading]="wallet.currency + ' · ' + when(wallet.createdAt)"
+      >
+        <div class="toolbar" cardActions>
+          <app-status-chip tone="info">
+            {{ 'walletType.' + wallet.type | translate }}
+          </app-status-chip>
+          <button
+            type="button"
+            class="btn btn--sm"
+            (click)="openAssetForm(wallet.id, null)"
+          >
+            {{ 'portfolio.addAsset' | translate }}
+          </button>
+          <button type="button" class="btn btn--sm btn--ghost" (click)="openWalletForm(wallet)">
+            {{ 'common.edit' | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn--sm btn--ghost"
+            (click)="confirmWalletDelete(wallet)"
+          >
+            {{ 'common.delete' | translate }}
+          </button>
+        </div>
+
+        <dl class="wallet__stats">
+          <div>
+            <dt>{{ 'common.marketValue' | translate }}</dt>
+            <dd><app-amount [value]="wallet.totalValue" [currency]="wallet.currency" /></dd>
+          </div>
+          <div>
+            <dt>{{ 'common.cash' | translate }}</dt>
+            <dd><app-amount [value]="wallet.balance" [currency]="wallet.currency" /></dd>
+          </div>
+          <div>
+            <dt>{{ 'common.invested' | translate }}</dt>
+            <dd><app-amount [value]="wallet.investedValue" [currency]="wallet.currency" /></dd>
+          </div>
+          <div>
+            <dt>{{ 'common.gainLoss' | translate }}</dt>
+            <dd class="wallet__delta">
+              <app-amount [value]="wallet.gainLoss" [currency]="wallet.currency" [signed]="true" />
+              <app-delta-chip [value]="wallet.gainLossPercent" />
+            </dd>
+          </div>
+        </dl>
+
+        @if (wallet.positions.length) {
+          <app-data-table>
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ 'common.symbol' | translate }}</th>
+                  <th class="wrap">{{ 'common.asset' | translate }}</th>
+                  <th class="num">{{ 'common.quantity' | translate }}</th>
+                  <th class="num">{{ 'common.avgPrice' | translate }}</th>
+                  <th class="num">{{ 'common.currentPrice' | translate }}</th>
+                  <th class="num">{{ 'common.marketValue' | translate }}</th>
+                  <th class="num">{{ 'common.gainLoss' | translate }}</th>
+                  <th class="act">{{ 'common.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (position of wallet.positions; track position.id) {
+                  <tr>
+                    <td class="sym">{{ position.symbol }}</td>
+                    <td class="wrap">{{ position.name }}</td>
+                    <td class="num">{{ quantity(position.quantity) }}</td>
+                    <td class="num">
+                      <app-amount [value]="position.avgBuyPrice" [currency]="wallet.currency" />
+                    </td>
+                    <td class="num">
+                      @if (position.currentPrice !== null) {
+                        <app-amount [value]="position.currentPrice" [currency]="wallet.currency" />
+                      } @else {
+                        {{ 'common.none' | translate }}
+                      }
+                    </td>
+                    <td class="num">
+                      <app-amount [value]="position.marketValue" [currency]="wallet.currency" />
+                    </td>
+                    <td class="num">
+                      <span class="cell-pair">
+                        <app-amount
+                          [value]="position.gainLoss"
+                          [currency]="wallet.currency"
+                          [signed]="true"
+                        />
+                        <app-delta-chip [value]="position.gainLossPercent" />
+                      </span>
+                    </td>
+                    <td class="act">
+                      <span class="row-actions">
+                        <button
+                          type="button"
+                          class="btn btn--sm btn--ghost"
+                          (click)="openAssetForm(wallet.id, position)"
+                        >
+                          {{ 'common.edit' | translate }}
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn--sm btn--ghost"
+                          (click)="confirmAssetDelete(position)"
+                        >
+                          {{ 'common.delete' | translate }}
+                        </button>
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </app-data-table>
+        } @else {
+          <p class="wallet__empty muted">{{ 'portfolio.cashOnly' | translate }}</p>
+        }
+      </app-card>
+    } @else {
+      <app-card>
+        <p class="empty-state">{{ 'portfolio.noWallets' | translate }}</p>
+      </app-card>
+    }
+  </section>
+
+  @if (risk().byAsset.length) {
+    <app-card
+      [flush]="true"
+      [heading]="'portfolio.byAsset' | translate"
+      [subheading]="'portfolio.byAssetSub' | translate"
+    >
+      <app-data-table>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'common.symbol' | translate }}</th>
+              <th class="wrap">{{ 'common.asset' | translate }}</th>
+              <th>{{ 'common.type' | translate }}</th>
+              <th class="num">{{ 'common.value' | translate }}</th>
+              <th class="num">{{ 'common.weight' | translate }}</th>
+              <th class="num">{{ 'common.volatility' | translate }}</th>
+              <th>{{ 'common.riskLevel' | translate }}</th>
+              <th>{{ 'portfolio.colSingleThreshold' | translate }}</th>
+              <th>{{ 'portfolio.colRuleThreshold' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (entry of risk().byAsset; track entry.symbol) {
+              <tr>
+                <td class="sym">{{ entry.symbol }}</td>
+                <td class="wrap">{{ entry.name }}</td>
+                <td>{{ 'walletType.' + entry.walletType | translate }}</td>
+                <td class="num"><app-amount [value]="entry.value" /></td>
+                <td class="num">{{ percentPrecise(entry.weightPercent) }}</td>
+                <td class="num">{{ percentPrecise(entry.volatilityPercent) }}</td>
+                <td>
+                  <app-status-chip [tone]="riskLevelTone(entry.riskLevel)">
+                    {{ 'riskLevel.' + entry.riskLevel | translate }}
+                  </app-status-chip>
+                </td>
+                <td>
+                  <app-status-chip
+                    [tone]="entry.exceedsSingleAssetThreshold ? 'negative' : 'positive'"
+                  >
+                    {{
+                      (entry.exceedsSingleAssetThreshold
+                        ? 'portfolio.breach'
+                        : 'portfolio.compliant'
+                      ) | translate
+                    }}
+                  </app-status-chip>
+                </td>
+                <td>
+                  <app-status-chip [tone]="entry.exceedsSinglePositionRule ? 'warning' : 'positive'">
+                    {{
+                      (entry.exceedsSinglePositionRule
+                        ? 'portfolio.breach'
+                        : 'portfolio.compliant'
+                      ) | translate
+                    }}
+                  </app-status-chip>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </app-data-table>
+    </app-card>
+  }
+</div>
+
+@switch (dialog().kind) {
+  @case ('wallet') {
+    <app-wallet-form
+      [wallet]="$any(dialog()).wallet"
+      [errorKey]="formError()"
+      (save)="saveWallet($event)"
+      (cancel)="close()"
+    />
+  }
+  @case ('asset') {
+    <app-asset-form
+      [wallets]="plainWallets()"
+      [walletId]="$any(dialog()).walletId"
+      [asset]="$any(dialog()).asset"
+      [errorKey]="formError()"
+      (save)="saveAsset($event)"
+      (cancel)="close()"
+    />
+  }
+  @case ('deleteWallet') {
+    <app-confirm-dialog
+      [title]="'portfolio.deleteWallet' | translate"
+      [message]="
+        'portfolio.deleteWalletConfirm' | translate: { name: $any(dialog()).wallet.name }
+      "
+      [detail]="deleteWalletDetail($any(dialog()).wallet)"
+      [confirmLabel]="'common.delete' | translate"
+      (confirmed)="deleteWallet()"
+      (cancelled)="close()"
+    />
+  }
+  @case ('deleteAsset') {
+    <app-confirm-dialog
+      [title]="'portfolio.deleteAsset' | translate"
+      [message]="
+        'portfolio.deleteAssetConfirm' | translate: { symbol: $any(dialog()).asset.symbol }
+      "
+      [detail]="'portfolio.deleteAssetDetail' | translate"
+      [confirmLabel]="'common.delete' | translate"
+      (confirmed)="deleteAsset()"
+      (cancelled)="close()"
+    />
+  }
+}

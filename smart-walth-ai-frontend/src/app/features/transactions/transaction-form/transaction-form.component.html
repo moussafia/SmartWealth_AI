@@ -1,0 +1,107 @@
+<app-modal
+  [title]="'transactions.newTransaction' | translate"
+  [subtitle]="'transactions.newTransactionSub' | translate"
+  [closeLabel]="'common.cancel' | translate"
+  [wide]="true"
+  (dismissed)="cancel.emit()"
+>
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+    <app-form-field for="t-type" [label]="'common.type' | translate" [control]="form.controls.type">
+      <select id="t-type" formControlName="type">
+        @for (type of types; track type) {
+          <option [value]="type">{{ 'txType.' + type | translate }}</option>
+        }
+      </select>
+    </app-form-field>
+
+    <app-form-field
+      for="t-wallet"
+      [label]="'common.wallet' | translate"
+      [control]="form.controls.walletId"
+      [hint]="('transactions.availableCash' | translate) + ' ' + money(availableCash())"
+    >
+      <select id="t-wallet" formControlName="walletId">
+        @for (wallet of wallets(); track wallet.id) {
+          <option [value]="wallet.id">{{ wallet.name }}</option>
+        }
+      </select>
+    </app-form-field>
+
+    @if (isTrade()) {
+      <app-form-field
+        for="t-symbol"
+        [label]="'common.symbol' | translate"
+        [control]="form.controls.assetSymbol"
+        [hint]="
+          form.controls.type.value === 'SELL'
+            ? ('transactions.availableQuantity' | translate) +
+              ' ' +
+              quantityLabel(availableQuantity())
+            : ('transactions.symbolHint' | translate)
+        "
+      >
+        <input id="t-symbol" type="text" formControlName="assetSymbol" autocomplete="off" />
+      </app-form-field>
+
+      <app-form-field
+        for="t-assetname"
+        [label]="'common.asset' | translate"
+        [control]="form.controls.assetName"
+        [optional]="true"
+      >
+        <input id="t-assetname" type="text" formControlName="assetName" autocomplete="off" />
+      </app-form-field>
+
+      <app-form-field
+        for="t-quantity"
+        [label]="'common.quantity' | translate"
+        [control]="form.controls.quantity"
+      >
+        <input id="t-quantity" type="number" min="0" step="0.000001" formControlName="quantity" />
+      </app-form-field>
+
+      <app-form-field
+        for="t-price"
+        [label]="'transactions.unitPrice' | translate"
+        [control]="form.controls.unitPrice"
+      >
+        <input id="t-price" type="number" min="0" step="0.01" formControlName="unitPrice" />
+      </app-form-field>
+
+      <div class="computed form-grid__full">
+        <span class="label">{{ 'common.amount' | translate }}</span>
+        <strong class="computed__value">{{ money(tradeAmount()) }}</strong>
+      </div>
+    } @else {
+      <app-form-field
+        class="form-grid__full"
+        for="t-amount"
+        [label]="'common.amount' | translate"
+        [control]="form.controls.amount"
+      >
+        <input id="t-amount" type="number" min="0" step="10" formControlName="amount" />
+      </app-form-field>
+    }
+
+    <app-form-field
+      class="form-grid__full"
+      for="t-desc"
+      [label]="'common.description' | translate"
+      [control]="form.controls.description"
+      [optional]="true"
+    >
+      <textarea id="t-desc" formControlName="description" rows="2"></textarea>
+    </app-form-field>
+  </form>
+
+  @if (errorKey()) {
+    <span class="form-error" role="alert">{{ errorKey() | translate }}</span>
+  }
+
+  <button type="button" class="btn" modalActions (click)="cancel.emit()">
+    {{ 'common.cancel' | translate }}
+  </button>
+  <button type="button" class="btn btn--primary" modalActions (click)="submit()">
+    {{ 'transactions.submit' | translate }}
+  </button>
+</app-modal>

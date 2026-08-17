@@ -1,0 +1,90 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand__mark">SW</span>
+      <span class="brand__text">
+        <strong>{{ 'app.name' | translate }}</strong>
+        <small>{{ 'app.tagline' | translate }}</small>
+      </span>
+    </div>
+
+    <nav class="nav" [attr.aria-label]="'nav.label' | translate">
+      @for (item of navItems(); track item.path) {
+        <a
+          class="nav__link"
+          [routerLink]="item.path"
+          routerLinkActive="nav__link--active"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
+          <span class="nav__icon" aria-hidden="true">{{ item.icon }}</span>
+          <span>{{ item.labelKey | translate }}</span>
+        </a>
+      }
+    </nav>
+
+    <a class="nav__link nav__link--foot" routerLink="/login">
+      <span class="nav__icon"><app-icon name="power" /></span>
+      <span>{{ 'shell.logout' | translate }}</span>
+    </a>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__spacer"></div>
+
+      <button type="button" class="icon-btn icon-btn--text" (click)="toggleLanguage()">
+        {{ language() === 'fr' ? 'FR' : 'EN' }}
+      </button>
+
+      <button
+        type="button"
+        class="icon-btn"
+        [attr.aria-label]="(isDark() ? 'shell.theme.light' : 'shell.theme.dark') | translate"
+        (click)="toggleTheme()"
+      >
+        <app-icon [name]="isDark() ? 'sun' : 'moon'" />
+      </button>
+
+      <div class="bell">
+        <button
+          type="button"
+          class="icon-btn"
+          [attr.aria-label]="'shell.notifications' | translate"
+          [attr.aria-expanded]="panelOpen()"
+          (click)="togglePanel()"
+        >
+          <app-icon name="bell" />
+          @if (unreadCount() > 0) {
+            <span class="bell__badge">{{ unreadCount() }}</span>
+          }
+        </button>
+
+        @if (panelOpen()) {
+          <app-notification-panel
+            [items]="feed()"
+            [unreadCount]="unreadCount()"
+            (dismiss)="closePanel()"
+            (toggleRead)="notifications.toggleRead($event)"
+            (remove)="notifications.dismiss($event)"
+            (markAllRead)="notifications.markAllRead()"
+            (clearAll)="notifications.clearAll()"
+          />
+        }
+      </div>
+
+      @if (user(); as currentUser) {
+        <a class="account" routerLink="/profile">
+          <span class="account__avatar" aria-hidden="true">{{ initials() }}</span>
+          <span class="account__meta">
+            <strong>{{ fullName() }}</strong>
+            <small>{{ currentUser.email }}</small>
+          </span>
+        </a>
+      }
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

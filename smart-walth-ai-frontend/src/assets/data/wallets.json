@@ -1,0 +1,29 @@
+[
+  {
+    "id": "a1c93e70-4f2b-4d18-9a55-7b6e2c8d1f30",
+    "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "Portefeuille Actions",
+    "type": "STOCKS",
+    "balance": 3250.0,
+    "currency": "USD",
+    "createdAt": "2025-09-14T09:20:10Z"
+  },
+  {
+    "id": "b2d84f61-5a3c-4e29-8b66-8c7f3d9e2a41",
+    "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "Épargne Sécurisée",
+    "type": "SAVINGS",
+    "balance": 18500.0,
+    "currency": "USD",
+    "createdAt": "2025-09-14T09:24:55Z"
+  },
+  {
+    "id": "c3e95a52-6b4d-4f3a-9c77-9d8a4e0f3b52",
+    "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "Crypto Actifs",
+    "type": "CRYPTO",
+    "balance": 640.0,
+    "currency": "USD",
+    "createdAt": "2025-11-02T14:41:07Z"
+  }
+]

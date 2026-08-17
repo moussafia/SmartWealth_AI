@@ -1,0 +1,79 @@
+[
+  {
+    "id": "nt-001",
+    "eventType": "PORTFOLIO_UPDATED",
+    "topic": "portfolio-events",
+    "channel": "PUSH",
+    "severity": "INFO",
+    "title": "Portefeuille revalorisé",
+    "message": "Valorisation mise à jour : 121 145,05 USD (+842,30 USD sur la séance).",
+    "read": false,
+    "createdAt": "2026-08-08T16:52:00Z"
+  },
+  {
+    "id": "nt-002",
+    "eventType": "TRANSACTION_COMPLETED",
+    "topic": "transaction-events",
+    "channel": "PUSH",
+    "severity": "SUCCESS",
+    "title": "Dépôt confirmé",
+    "message": "Votre dépôt de 1 500,00 USD sur Épargne Sécurisée est finalisé.",
+    "read": false,
+    "createdAt": "2026-08-08T11:05:41Z"
+  },
+  {
+    "id": "nt-003",
+    "eventType": "ANOMALY_DETECTED",
+    "topic": "alert-events",
+    "channel": "EMAIL",
+    "severity": "CRITICAL",
+    "title": "Anomalie détectée",
+    "message": "Retrait de 12 500,00 USD identifié comme inhabituel par l'agent IA.",
+    "read": false,
+    "createdAt": "2026-08-06T09:52:35Z"
+  },
+  {
+    "id": "nt-004",
+    "eventType": "TRANSACTION_COMPLETED",
+    "topic": "transaction-events",
+    "channel": "PUSH",
+    "severity": "WARNING",
+    "title": "Échec d'achat NVDA",
+    "message": "L'achat de 15 NVDA a échoué (solde insuffisant) et a été routé vers le dead letter topic.",
+    "read": true,
+    "createdAt": "2026-08-03T17:00:12Z"
+  },
+  {
+    "id": "nt-005",
+    "eventType": "PORTFOLIO_UPDATED",
+    "topic": "portfolio-events",
+    "channel": "PUSH",
+    "severity": "INFO",
+    "title": "Position Bitcoin mise à jour",
+    "message": "Achat de 0,05 BTC intégré à votre wallet Crypto Actifs.",
+    "read": true,
+    "createdAt": "2026-08-05T14:13:25Z"
+  },
+  {
+    "id": "nt-006",
+    "eventType": "ANOMALY_DETECTED",
+    "topic": "alert-events",
+    "channel": "EMAIL",
+    "severity": "WARNING",
+    "title": "Exposition crypto élevée",
+    "message": "Votre poche crypto atteint 32,08 % du patrimoine (seuil 20 %).",
+    "read": true,
+    "createdAt": "2026-08-05T06:00:00Z"
+  },
+  {
+    "id": "nt-007",
+    "eventType": "USER_REGISTERED",
+    "topic": "user-events",
+    "channel": "EMAIL",
+    "severity": "SUCCESS",
+    "title": "Vérification KYC validée",
+    "message": "Votre dossier KYC est vérifié, toutes les fonctionnalités sont désormais actives.",
+    "read": true,
+    "createdAt": "2025-09-15T10:22:18Z"
+  }
+]

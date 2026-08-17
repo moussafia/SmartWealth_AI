@@ -1,0 +1,139 @@
+@use 'styles/mixins' as m;
+
+.stamp {
+  @include m.numeric;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+
+/* Wide enough for the five headline metrics to share one row. */
+@media (min-width: 1240px) {
+  .tiles {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.tile__max {
+  font-size: var(--font-size-md);
+  color: var(--color-text-muted);
+}
+
+.tile__risk {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+
+  app-score-bar {
+    flex: 1;
+  }
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-3);
+}
+
+.trio {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-3);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alerts,
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-sm);
+}
+
+.alert,
+.feed__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  p {
+    font-size: var(--font-size-xs);
+  }
+
+  .btn {
+    margin-top: var(--space-1);
+  }
+}
+
+/* Segmented control switching the evolution chart window */
+.range {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.range__btn {
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+
+  & + & {
+    border-left: 1px solid var(--color-border);
+  }
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &--active {
+    background: var(--color-surface-raised);
+    color: var(--color-info);
+  }
+}
+
+.alert__head,
+.feed__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.feed__item--unread {
+  box-shadow: inset 2px 0 0 var(--color-info);
+  padding-left: var(--space-3);
+}
+
+.sym {
+  font-family: var(--font-family-mono);
+}

@@ -1,0 +1,23 @@
+@use 'styles/mixins' as m;
+
+:host {
+  display: block;
+}
+
+.field__optional {
+  margin-left: var(--space-1);
+  font-weight: var(--font-weight-regular);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-text-muted);
+}
+
+.field__error {
+  font-size: var(--font-size-xs);
+  color: var(--color-negative);
+}
+
+.field__hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}

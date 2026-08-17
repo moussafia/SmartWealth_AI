@@ -1,0 +1,51 @@
+{
+  "id": "an-2026-08-08-01",
+  "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "query": "Mon portefeuille est-il bien diversifié ?",
+  "startedAt": "2026-08-08T16:11:32Z",
+  "completedAt": "2026-08-08T16:11:41Z",
+  "durationMs": 4382,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "get_portfolio",
+      "description": "Récupération de la composition actuelle du portefeuille",
+      "status": "DONE",
+      "durationMs": 198,
+      "output": "3 wallets, 6 actifs, valorisation 121 145,05 USD"
+    },
+    {
+      "step": 2,
+      "tool": "get_transaction_history",
+      "description": "Analyse des transactions des 30 derniers jours",
+      "status": "DONE",
+      "durationMs": 276,
+      "output": "14 transactions, dont 1 anomalie et 1 échec"
+    },
+    {
+      "step": 3,
+      "tool": "calculate_risk_score",
+      "description": "Calcul de la concentration et de la volatilité par actif",
+      "status": "DONE",
+      "durationMs": 331,
+      "output": "Score global 64/100 — concentration 42, volatilité 68, Sharpe 1,12"
+    },
+    {
+      "step": 4,
+      "tool": "search_financial_knowledge",
+      "description": "Interrogation de la base RAG sur les règles de diversification",
+      "status": "DONE",
+      "durationMs": 412,
+      "output": "3 règles retournées : règle des 5 %, seuil crypto 20 %, concentration sectorielle"
+    },
+    {
+      "step": 5,
+      "tool": "generate_health_report",
+      "description": "Synthèse des données et génération du conseil personnalisé",
+      "status": "DONE",
+      "durationMs": 1204,
+      "output": "Conseil structuré avec 3 recommandations prioritaires"
+    }
+  ],
+  "conclusion": "La diversification est correcte entre classes d'actifs mais l'exposition crypto (32,08 %) dépasse largement le seuil recommandé de 20 %. Aucune position ne franchit le seuil critique de surconcentration de 50 %. Priorité : alléger la poche crypto et conserver le niveau actuel d'épargne."
+}

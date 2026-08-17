@@ -1,0 +1,27 @@
+/* Shared style fragments so component stylesheets stay free of raw values. */
+
+@mixin numeric {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@mixin label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+}
+
+@mixin card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+}
+
+@mixin focus-ring {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}

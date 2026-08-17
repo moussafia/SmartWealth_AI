@@ -1,0 +1,179 @@
+<div class="page">
+  <app-page-header [title]="'profile.title' | translate" [subtitle]="'profile.subtitle' | translate" />
+
+  @if (user(); as currentUser) {
+    <section class="split">
+      <app-card [heading]="'profile.identity' | translate">
+        <div class="toolbar" cardActions>
+          @if (editing()) {
+            <button type="button" class="btn btn--sm" (click)="cancelEdit()">
+              {{ 'common.cancel' | translate }}
+            </button>
+            <button type="button" class="btn btn--sm btn--primary" (click)="saveProfile()">
+              {{ 'common.save' | translate }}
+            </button>
+          } @else {
+            <button type="button" class="btn btn--sm" (click)="startEdit()">
+              {{ 'profile.editProfile' | translate }}
+            </button>
+          }
+        </div>
+
+        <div class="identity">
+          <span class="identity__avatar" aria-hidden="true">{{ initials() }}</span>
+          <div>
+            <strong class="identity__name">
+              {{ currentUser.firstName }} {{ currentUser.lastName }}
+            </strong>
+            <p class="muted">{{ currentUser.email }}</p>
+          </div>
+        </div>
+
+        @if (editing()) {
+          <form [formGroup]="form" class="form-grid" (ngSubmit)="saveProfile()">
+            <app-form-field
+              for="p-first"
+              [label]="'profile.firstName' | translate"
+              [control]="form.controls.firstName"
+            >
+              <input id="p-first" type="text" formControlName="firstName" autocomplete="given-name" />
+            </app-form-field>
+
+            <app-form-field
+              for="p-last"
+              [label]="'profile.lastName' | translate"
+              [control]="form.controls.lastName"
+            >
+              <input id="p-last" type="text" formControlName="lastName" autocomplete="family-name" />
+            </app-form-field>
+
+            <app-form-field
+              class="form-grid__full"
+              for="p-email"
+              [label]="'profile.email' | translate"
+              [control]="form.controls.email"
+            >
+              <input id="p-email" type="email" formControlName="email" autocomplete="email" />
+            </app-form-field>
+          </form>
+
+          @if (formError()) {
+            <span class="form-error" role="alert">{{ formError() | translate }}</span>
+          }
+        } @else {
+          <dl class="rows">
+            <div>
+              <dt>{{ 'common.role' | translate }}</dt>
+              <dd class="rows__action">
+                <app-status-chip tone="info">
+                  {{ 'role.' + currentUser.role | translate }}
+                </app-status-chip>
+                <button type="button" class="btn btn--sm btn--ghost" (click)="toggleRole()">
+                  {{ 'profile.switchRole' | translate }}
+                </button>
+              </dd>
+            </div>
+            <div>
+              <dt>{{ 'profile.kycStatus' | translate }}</dt>
+              <dd class="rows__action">
+                <app-status-chip [tone]="kycStatusTone(currentUser.kycStatus)">
+                  {{ 'kyc.' + currentUser.kycStatus | translate }}
+                </app-status-chip>
+                @if (currentUser.kycStatus === 'PENDING') {
+                  <button type="button" class="btn btn--sm" (click)="requestKyc()">
+                    {{ 'profile.submitKyc' | translate }}
+                  </button>
+                } @else {
+                  <button type="button" class="btn btn--sm btn--ghost" (click)="resetKyc()">
+                    {{ 'profile.resetKyc' | translate }}
+                  </button>
+                }
+              </dd>
+            </div>
+            <div>
+              <dt>{{ 'profile.memberSince' | translate }}</dt>
+              <dd>{{ when(currentUser.createdAt) }}</dd>
+            </div>
+            <div>
+              <dt>{{ 'profile.lastUpdate' | translate }}</dt>
+              <dd>{{ when(currentUser.updatedAt) }}</dd>
+            </div>
+          </dl>
+
+          <p class="notice muted">{{ 'profile.sessionNotice' | translate }}</p>
+        }
+      </app-card>
+
+      <app-card [heading]="'profile.preferences' | translate">
+        <dl class="rows">
+          <div>
+            <dt>{{ 'common.theme' | translate }}</dt>
+            <dd>
+              <button type="button" class="btn" (click)="toggleTheme()">
+                <app-icon [name]="isDark() ? 'moon' : 'sun'" />
+                {{ (isDark() ? 'common.dark' : 'common.light') | translate }}
+              </button>
+            </dd>
+          </div>
+          <div>
+            <dt>{{ 'common.language' | translate }}</dt>
+            <dd>
+              <button type="button" class="btn" (click)="toggleLanguage()">
+                {{ language() === 'fr' ? 'Français' : 'English' }}
+              </button>
+            </dd>
+          </div>
+        </dl>
+      </app-card>
+    </section>
+
+    <app-card [flush]="true" [heading]="'profile.walletsOwned' | translate">
+      <app-data-table>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'common.name' | translate }}</th>
+              <th>{{ 'common.type' | translate }}</th>
+              <th class="num">{{ 'common.cash' | translate }}</th>
+              <th>{{ 'common.currency' | translate }}</th>
+              <th class="num">{{ 'common.created' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (wallet of wallets(); track wallet.id) {
+              <tr>
+                <td>{{ wallet.name }}</td>
+                <td>
+                  <app-status-chip tone="neutral">
+                    {{ 'walletType.' + wallet.type | translate }}
+                  </app-status-chip>
+                </td>
+                <td class="num">
+                  <app-amount [value]="wallet.balance" [currency]="wallet.currency" />
+                </td>
+                <td>{{ wallet.currency }}</td>
+                <td class="num">{{ when(wallet.createdAt) }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td class="empty" colspan="5">{{ 'portfolio.noWallets' | translate }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </app-data-table>
+    </app-card>
+  }
+</div>
+
+@if (confirmKyc()) {
+  <app-confirm-dialog
+    [title]="'profile.submitKyc' | translate"
+    [message]="'profile.kycConfirm' | translate"
+    [detail]="'profile.kycDetail' | translate"
+    [confirmLabel]="'profile.submitKyc' | translate"
+    [destructive]="false"
+    (confirmed)="submitKyc()"
+    (cancelled)="confirmKyc.set(false)"
+  />
+}

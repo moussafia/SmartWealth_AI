@@ -1,0 +1,75 @@
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+  align-items: end;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding-bottom: var(--space-2);
+
+  input {
+    accent-color: var(--color-info);
+  }
+}
+
+.field--search {
+  grid-column: span 2;
+}
+
+/* Column header doubling as a sort control; inherits the header's label styling */
+.sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &--num {
+    justify-content: flex-end;
+  }
+}
+
+.sort__arrow {
+  width: 8px;
+  font-size: 8px;
+  color: var(--color-info);
+}
+
+.sym {
+  font-family: var(--font-family-mono);
+}
+
+.desc {
+  max-width: 240px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 700px) {
+  .field--search {
+    grid-column: auto;
+  }
+}

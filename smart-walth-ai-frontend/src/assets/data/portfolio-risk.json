@@ -1,0 +1,82 @@
+{
+  "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "overallScore": 64,
+  "level": "MODERATE",
+  "concentrationScore": 42,
+  "volatilityScore": 68,
+  "sharpeRatio": 1.12,
+  "calculatedAt": "2026-08-08T16:52:00Z",
+  "thresholds": {
+    "singleAssetMaxPercent": 50,
+    "cryptoMaxPercent": 20,
+    "singlePositionRulePercent": 5
+  },
+  "byAsset": [
+    {
+      "symbol": "BTC",
+      "name": "Bitcoin",
+      "walletType": "CRYPTO",
+      "value": 28534.8,
+      "weightPercent": 23.55,
+      "volatilityPercent": 58.7,
+      "riskLevel": "HIGH",
+      "exceedsSingleAssetThreshold": false,
+      "exceedsSinglePositionRule": true
+    },
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "walletType": "STOCKS",
+      "value": 27342.0,
+      "weightPercent": 22.57,
+      "volatilityPercent": 24.8,
+      "riskLevel": "MODERATE",
+      "exceedsSingleAssetThreshold": false,
+      "exceedsSinglePositionRule": true
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "walletType": "STOCKS",
+      "value": 18837.0,
+      "weightPercent": 15.55,
+      "volatilityPercent": 21.3,
+      "riskLevel": "MODERATE",
+      "exceedsSingleAssetThreshold": false,
+      "exceedsSinglePositionRule": true
+    },
+    {
+      "symbol": "ETH",
+      "name": "Ethereum",
+      "walletType": "CRYPTO",
+      "value": 9695.25,
+      "weightPercent": 8.0,
+      "volatilityPercent": 64.3,
+      "riskLevel": "HIGH",
+      "exceedsSingleAssetThreshold": false,
+      "exceedsSinglePositionRule": true
+    },
+    {
+      "symbol": "VTI",
+      "name": "Vanguard Total Stock Market ETF",
+      "walletType": "STOCKS",
+      "value": 8052.0,
+      "weightPercent": 6.65,
+      "volatilityPercent": 14.1,
+      "riskLevel": "LOW",
+      "exceedsSingleAssetThreshold": false,
+      "exceedsSinglePositionRule": true
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "walletType": "STOCKS",
+      "value": 6294.0,
+      "weightPercent": 5.19,
+      "volatilityPercent": 46.2,
+      "riskLevel": "HIGH",
+      "exceedsSingleAssetThreshold": false,
+      "exceedsSinglePositionRule": true
+    }
+  ]
+}

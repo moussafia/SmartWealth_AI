@@ -1,0 +1,366 @@
+<div class="page">
+  <app-page-header [title]="'advisor.title' | translate" [subtitle]="'advisor.subtitle' | translate">
+    <div class="toolbar">
+      <span class="stamp">
+        {{ 'common.updated' | translate }} {{ when(report().generatedAt) }}
+      </span>
+      <button type="button" class="btn btn--primary" (click)="regenerateReport()">
+        {{ 'advisor.regenerate' | translate }}
+      </button>
+    </div>
+  </app-page-header>
+
+  <section class="tiles">
+    <app-metric-tile [label]="'advisor.healthScore' | translate" [accent]="true">
+      {{ report().healthScore }}<span class="tile__max">/100</span>
+      <span tileMeta class="tile__bar">
+        <app-score-bar
+          [value]="report().healthScore"
+          tone="positive"
+          [label]="'advisor.healthScore' | translate"
+        />
+      </span>
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'common.riskScore' | translate">
+      {{ report().riskScore }}<span class="tile__max">/100</span>
+      <app-status-chip tileMeta [tone]="riskLevelTone(report().riskLevel)">
+        {{ 'riskLevel.' + report().riskLevel | translate }}
+      </app-status-chip>
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'advisor.alerts' | translate" [live]="true">
+      {{ activeAlertCount() }}
+      <span tileMeta>{{ 'advisor.ofTotal' | translate: { count: alerts().length } }}</span>
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'advisor.chat' | translate">
+      {{ memoryTurns() }}
+      <span tileMeta>{{ 'advisor.memory' | translate }}</span>
+    </app-metric-tile>
+  </section>
+
+  <section class="split">
+    <app-card [heading]="'advisor.chat' | translate" [subheading]="'advisor.chatSub' | translate">
+      <button
+        type="button"
+        class="btn btn--sm btn--ghost"
+        cardActions
+        [disabled]="messages().length === 0"
+        (click)="requestClearMemory()"
+      >
+        {{ 'advisor.clearMemory' | translate }}
+      </button>
+
+      <div class="chat">
+        <ol class="chat__log" aria-live="polite">
+          @for (message of messages(); track message.id) {
+            <li class="msg" [class.msg--agent]="message.role === 'AGENT'">
+              <div class="msg__head">
+                <strong>
+                  {{ (message.role === 'AGENT' ? 'advisor.agent' : 'advisor.you') | translate }}
+                </strong>
+                <span class="stamp">{{ when(message.createdAt) }}</span>
+              </div>
+              <p class="msg__body">{{ message.content }}</p>
+              @if (message.toolCalls.length) {
+                <div class="msg__tools">
+                  <span class="label">{{ 'advisor.toolCalls' | translate }}</span>
+                  @for (call of message.toolCalls; track call.tool) {
+                    <app-status-chip tone="info">
+                      {{ 'tool.' + call.tool | translate }} · {{ seconds(call.durationMs) }}
+                    </app-status-chip>
+                  }
+                </div>
+              }
+            </li>
+          } @empty {
+            <li class="muted">{{ 'advisor.emptyChat' | translate }}</li>
+          }
+
+          @if (thinking()) {
+            <li class="msg msg--agent msg--thinking">
+              <div class="msg__head">
+                <strong>{{ 'advisor.agent' | translate }}</strong>
+              </div>
+              <p class="msg__body muted">{{ 'advisor.thinking' | translate }}</p>
+            </li>
+          }
+        </ol>
+
+        <div class="chat__suggestions">
+          @for (suggestion of suggestions; track suggestion) {
+            <button
+              type="button"
+              class="btn btn--sm btn--ghost"
+              [disabled]="thinking()"
+              (click)="ask(suggestion)"
+            >
+              {{ suggestion | translate }}
+            </button>
+          }
+        </div>
+
+        <form class="chat__composer" [formGroup]="chatForm" (ngSubmit)="send()">
+          <input
+            type="text"
+            formControlName="message"
+            [attr.placeholder]="'advisor.inputPlaceholder' | translate"
+            [attr.aria-label]="'advisor.inputPlaceholder' | translate"
+          />
+          <button type="submit" class="btn btn--primary" [disabled]="thinking()">
+            {{ 'advisor.send' | translate }}
+          </button>
+        </form>
+      </div>
+    </app-card>
+
+    <app-card
+      [heading]="'advisor.reasoning' | translate"
+      [subheading]="'advisor.reasoningSub' | translate"
+    >
+      <form class="analysis-form" [formGroup]="analysisForm" (ngSubmit)="runAnalysis()">
+        <input
+          type="text"
+          formControlName="query"
+          [attr.placeholder]="'advisor.analysisPlaceholder' | translate"
+          [attr.aria-label]="'advisor.analysisPlaceholder' | translate"
+        />
+        <button type="submit" class="btn btn--primary" [disabled]="analysisRunning()">
+          {{ (analysisRunning() ? 'advisor.running' : 'advisor.runAnalysis') | translate }}
+        </button>
+      </form>
+
+      @if (analysis(); as analysisData) {
+        <p class="query">
+          <span class="label">{{ 'advisor.query' | translate }}</span>
+          <em>“{{ analysisData.query }}”</em>
+        </p>
+
+        <ol class="steps" aria-live="polite">
+          @for (step of analysisData.steps; track step.step) {
+            <li class="step" [class.step--pending]="step.status === 'PENDING'">
+              <span class="step__index">{{ step.step }}</span>
+              <div class="step__body">
+                <div class="step__head">
+                  <code>{{ 'tool.' + step.tool | translate }}</code>
+                  <app-status-chip
+                    [tone]="
+                      step.status === 'DONE'
+                        ? 'positive'
+                        : step.status === 'RUNNING'
+                          ? 'info'
+                          : 'neutral'
+                    "
+                  >
+                    {{ 'stepStatus.' + step.status | translate }}
+                  </app-status-chip>
+                  <span class="stamp">{{ seconds(step.durationMs) }}</span>
+                </div>
+                <p>{{ step.description }}</p>
+                <p class="step__out muted">{{ step.output }}</p>
+              </div>
+            </li>
+          }
+        </ol>
+
+        @if (analysisData.conclusion) {
+          <div class="conclusion">
+            <span class="label">{{ 'advisor.conclusion' | translate }}</span>
+            <p>{{ analysisData.conclusion }}</p>
+          </div>
+        }
+      } @else {
+        <p class="empty-state">{{ 'advisor.noAnalysis' | translate }}</p>
+      }
+    </app-card>
+  </section>
+
+  <app-card [heading]="'advisor.report' | translate" [subheading]="'advisor.reportSub' | translate">
+    <span class="stamp" cardActions>
+      {{ day(report().periodStart) }} — {{ day(report().periodEnd) }}
+    </span>
+
+    <p class="summary">{{ report().summary }}</p>
+
+    <dl class="metrics">
+      @for (metric of report().metrics; track metric.key) {
+        <div>
+          <dt>{{ metric.label }}</dt>
+          <dd>{{ metricValue(metric) }}</dd>
+        </div>
+      }
+    </dl>
+
+    <h3 class="section-title">{{ 'advisor.recommendations' | translate }}</h3>
+    <ul class="recs">
+      @for (rec of report().recommendations; track rec.id) {
+        <li class="rec">
+          <app-status-chip [tone]="priorityTone(rec.priority)">
+            {{ 'priority.' + rec.priority | translate }}
+          </app-status-chip>
+          <div>
+            <strong>{{ rec.title }}</strong>
+            <p class="muted">{{ rec.detail }}</p>
+            @if (rec.knowledgeRefId) {
+              <code class="rec__ref">{{ rec.knowledgeRefId }}</code>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+
+    <h3 class="section-title">{{ 'advisor.spending' | translate }}</h3>
+    <app-data-table>
+      <table>
+        <thead>
+          <tr>
+            <th>{{ 'common.type' | translate }}</th>
+            <th class="num">{{ 'common.total' | translate }}</th>
+            <th class="num">{{ 'common.count' | translate }}</th>
+            <th class="num">{{ 'common.average' | translate }}</th>
+            <th class="num">{{ 'common.change' | translate }}</th>
+            <th>{{ 'advisor.flagged' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pattern of report().spendingPatterns; track pattern.id) {
+            <tr>
+              <td>{{ pattern.label }}</td>
+              <td class="num">{{ money(pattern.totalAmount) }}</td>
+              <td class="num">{{ pattern.transactionCount }}</td>
+              <td class="num">{{ money(pattern.averageAmount) }}</td>
+              <td class="num"><app-delta-chip [value]="pattern.changePercent" /></td>
+              <td>
+                @if (pattern.flagged) {
+                  <app-status-chip tone="warning">
+                    {{ 'advisor.flagged' | translate }}
+                  </app-status-chip>
+                } @else {
+                  <span class="muted">{{ 'common.none' | translate }}</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </app-data-table>
+  </app-card>
+
+  <section class="split">
+    <app-card [heading]="'advisor.alerts' | translate" [subheading]="'advisor.alertsSub' | translate">
+      <button
+        type="button"
+        class="btn btn--sm btn--ghost"
+        cardActions
+        [disabled]="!hasTriagedAlerts()"
+        (click)="restoreAlerts()"
+      >
+        {{ 'advisor.restoreAlerts' | translate }}
+      </button>
+
+      <ul class="alerts" aria-live="polite">
+        @for (alert of alerts(); track alert.id) {
+          <li class="alert">
+            <div class="alert__head">
+              <app-status-chip [tone]="priorityTone(alert.severity)">
+                {{ 'alertType.' + alert.type | translate }}
+              </app-status-chip>
+              <app-status-chip [tone]="alert.acknowledged ? 'neutral' : 'info'">
+                {{ (alert.acknowledged ? 'advisor.acknowledged' : 'advisor.active') | translate }}
+              </app-status-chip>
+              <span class="stamp">{{ when(alert.createdAt) }}</span>
+            </div>
+            <strong>{{ alert.title }}</strong>
+            <p class="muted">{{ alert.message }}</p>
+            @if (alert.thresholdPercent !== null && alert.actualPercent !== null) {
+              <p class="alert__nums">
+                {{ 'common.threshold' | translate }} {{ percent(alert.thresholdPercent) }} ·
+                {{ 'common.actual' | translate }} {{ percent(alert.actualPercent) }}
+              </p>
+            }
+            <div class="alert__actions">
+              @if (!alert.acknowledged) {
+                <button
+                  type="button"
+                  class="btn btn--sm btn--ghost"
+                  (click)="acknowledge(alert.id)"
+                >
+                  {{ 'advisor.acknowledge' | translate }}
+                </button>
+              }
+              <button
+                type="button"
+                class="btn btn--sm btn--ghost"
+                (click)="requestDismiss(alert)"
+              >
+                {{ 'common.dismiss' | translate }}
+              </button>
+            </div>
+          </li>
+        } @empty {
+          <li class="muted">{{ 'advisor.noAlerts' | translate }}</li>
+        }
+      </ul>
+    </app-card>
+
+    <app-card
+      [heading]="'advisor.knowledge' | translate"
+      [subheading]="'advisor.knowledgeSub' | translate"
+    >
+      <div class="kb__search" cardActions>
+        <input
+          type="search"
+          [value]="knowledgeQuery()"
+          [attr.placeholder]="'advisor.searchKnowledge' | translate"
+          [attr.aria-label]="'advisor.searchKnowledge' | translate"
+          (input)="onKnowledgeSearch($event)"
+        />
+        @if (knowledgeQuery()) {
+          <button type="button" class="btn btn--sm btn--ghost" (click)="clearKnowledgeSearch()">
+            {{ 'common.reset' | translate }}
+          </button>
+        }
+      </div>
+
+      <ul class="kb">
+        @for (entry of knowledge(); track entry.id) {
+          <li class="kb__item">
+            <div class="kb__head">
+              <app-status-chip tone="neutral">
+                {{ 'kbCategory.' + entry.category | translate }}
+              </app-status-chip>
+              <code class="kb__id">{{ entry.id }}</code>
+            </div>
+            <strong>{{ entry.title }}</strong>
+            <p class="muted">{{ entry.content }}</p>
+          </li>
+        } @empty {
+          <li class="muted">{{ 'advisor.noKnowledgeMatch' | translate }}</li>
+        }
+      </ul>
+    </app-card>
+  </section>
+</div>
+
+@if (pendingDismiss(); as target) {
+  <app-confirm-dialog
+    [title]="'advisor.dismissTitle' | translate"
+    [message]="'advisor.dismissConfirm' | translate: { title: target.title }"
+    [detail]="'advisor.dismissDetail' | translate"
+    [confirmLabel]="'common.dismiss' | translate"
+    (confirmed)="dismissConfirmed()"
+    (cancelled)="cancelDismiss()"
+  />
+}
+
+@if (confirmClearMemory()) {
+  <app-confirm-dialog
+    [title]="'advisor.clearMemory' | translate"
+    [message]="'advisor.clearMemoryConfirm' | translate"
+    [detail]="'advisor.clearMemoryDetail' | translate"
+    [confirmLabel]="'advisor.clearMemory' | translate"
+    (confirmed)="clearMemory()"
+    (cancelled)="confirmClearMemory.set(false)"
+  />
+}

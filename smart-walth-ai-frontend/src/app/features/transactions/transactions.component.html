@@ -1,0 +1,274 @@
+<div class="page">
+  <app-page-header
+    [title]="'transactions.title' | translate"
+    [subtitle]="'transactions.subtitle' | translate"
+  >
+    <button type="button" class="btn btn--primary" (click)="openComposer()">
+      {{ 'transactions.newTransaction' | translate }}
+    </button>
+  </app-page-header>
+
+  <section class="tiles">
+    <app-metric-tile [label]="'transactions.totalVolume' | translate">
+      <app-amount [value]="totalVolume()" [currency]="currency()" />
+      <span tileMeta>{{ filtered().length }} {{ 'common.results' | translate }}</span>
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'transactions.anomalyCount' | translate">
+      {{ anomalyCount() }}
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'transactions.failedCount' | translate">
+      {{ failedCount() }}
+    </app-metric-tile>
+
+    <app-metric-tile [label]="'transactions.pendingCount' | translate" [live]="true">
+      {{ pendingCount() }}
+    </app-metric-tile>
+  </section>
+
+  <app-card [heading]="'common.filters' | translate">
+    <div class="toolbar" cardActions>
+      @if (activeFilterCount() > 0) {
+        <span class="muted">
+          {{ 'common.activeFilters' | translate: { count: activeFilterCount() } }}
+        </span>
+      }
+      <button
+        type="button"
+        class="btn"
+        [disabled]="activeFilterCount() === 0"
+        (click)="reset()"
+      >
+        {{ 'common.reset' | translate }}
+      </button>
+    </div>
+
+    <div class="filters">
+      <div class="field field--search">
+        <label for="f-search">{{ 'common.search' | translate }}</label>
+        <input
+          id="f-search"
+          type="search"
+          [value]="search()"
+          [attr.placeholder]="'transactions.searchPlaceholder' | translate"
+          (input)="onSearch($event)"
+        />
+      </div>
+
+      <div class="field">
+        <label for="f-type">{{ 'common.type' | translate }}</label>
+        <select id="f-type" [value]="filters().type" (change)="patch({ type: $any(onSelect($event)) })">
+          <option value="ALL">{{ 'common.all' | translate }}</option>
+          @for (type of types; track type) {
+            <option [value]="type">{{ 'txType.' + type | translate }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f-status">{{ 'common.status' | translate }}</label>
+        <select
+          id="f-status"
+          [value]="filters().status"
+          (change)="patch({ status: $any(onSelect($event)) })"
+        >
+          <option value="ALL">{{ 'common.all' | translate }}</option>
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ 'txStatus.' + status | translate }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f-wallet">{{ 'common.wallet' | translate }}</label>
+        <select
+          id="f-wallet"
+          [value]="filters().walletId"
+          (change)="patch({ walletId: onSelect($event) })"
+        >
+          <option value="ALL">{{ 'common.all' | translate }}</option>
+          @for (wallet of wallets(); track wallet.id) {
+            <option [value]="wallet.id">{{ wallet.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f-from">{{ 'transactions.from' | translate }}</label>
+        <input
+          id="f-from"
+          type="date"
+          [value]="filters().from ?? ''"
+          (change)="patch({ from: onText($event) })"
+        />
+      </div>
+
+      <div class="field">
+        <label for="f-to">{{ 'transactions.to' | translate }}</label>
+        <input
+          id="f-to"
+          type="date"
+          [value]="filters().to ?? ''"
+          (change)="patch({ to: onText($event) })"
+        />
+      </div>
+
+      <div class="field">
+        <label for="f-min">{{ 'transactions.minAmount' | translate }}</label>
+        <input
+          id="f-min"
+          type="number"
+          min="0"
+          step="100"
+          [value]="filters().minAmount ?? ''"
+          (input)="patch({ minAmount: onNumber($event) })"
+        />
+      </div>
+
+      <div class="field">
+        <label for="f-max">{{ 'transactions.maxAmount' | translate }}</label>
+        <input
+          id="f-max"
+          type="number"
+          min="0"
+          step="100"
+          [value]="filters().maxAmount ?? ''"
+          (input)="patch({ maxAmount: onNumber($event) })"
+        />
+      </div>
+
+      <label class="check" for="f-anomaly">
+        <input
+          id="f-anomaly"
+          type="checkbox"
+          [checked]="filters().anomaliesOnly"
+          (change)="patch({ anomaliesOnly: onCheckbox($event) })"
+        />
+        <span>{{ 'transactions.anomaliesOnly' | translate }}</span>
+      </label>
+    </div>
+  </app-card>
+
+  <app-card [flush]="true" [heading]="'transactions.history' | translate">
+    <app-data-table maxHeight="560px">
+      <table>
+        <thead>
+          <tr>
+            <th [attr.aria-sort]="ariaSort('createdAt')">
+              <button type="button" class="sort" (click)="sortBy('createdAt')">
+                {{ 'common.date' | translate }}
+                <span class="sort__arrow">{{ sortIndicator('createdAt') }}</span>
+              </button>
+            </th>
+            <th [attr.aria-sort]="ariaSort('type')">
+              <button type="button" class="sort" (click)="sortBy('type')">
+                {{ 'common.type' | translate }}
+                <span class="sort__arrow">{{ sortIndicator('type') }}</span>
+              </button>
+            </th>
+            <th>{{ 'common.wallet' | translate }}</th>
+            <th>{{ 'common.asset' | translate }}</th>
+            <th class="num">{{ 'common.quantity' | translate }}</th>
+            <th class="num" [attr.aria-sort]="ariaSort('amount')">
+              <button type="button" class="sort sort--num" (click)="sortBy('amount')">
+                {{ 'common.amount' | translate }}
+                <span class="sort__arrow">{{ sortIndicator('amount') }}</span>
+              </button>
+            </th>
+            <th [attr.aria-sort]="ariaSort('status')">
+              <button type="button" class="sort" (click)="sortBy('status')">
+                {{ 'common.status' | translate }}
+                <span class="sort__arrow">{{ sortIndicator('status') }}</span>
+              </button>
+            </th>
+            <th>{{ 'transactions.anomaly' | translate }}</th>
+            <th class="wrap">{{ 'common.description' | translate }}</th>
+            <th class="act">{{ 'common.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody aria-live="polite">
+          @for (tx of filtered(); track tx.id) {
+            <tr>
+              <td class="num">{{ when(tx.createdAt) }}</td>
+              <td>
+                <app-status-chip [tone]="typeTone(tx.type)">
+                  {{ 'txType.' + tx.type | translate }}
+                </app-status-chip>
+              </td>
+              <td>{{ walletName(tx.walletId) }}</td>
+              <td class="sym">{{ tx.assetSymbol ?? ('common.none' | translate) }}</td>
+              <td class="num">
+                {{ tx.quantity !== null ? quantity(tx.quantity) : ('common.none' | translate) }}
+              </td>
+              <td class="num"><app-amount [value]="tx.amount" [currency]="currency()" /></td>
+              <td>
+                <app-status-chip [tone]="statusTone(tx.status)">
+                  {{ 'txStatus.' + tx.status | translate }}
+                </app-status-chip>
+              </td>
+              <td>
+                @if (tx.isAnomaly) {
+                  <app-status-chip tone="negative">
+                    {{ 'transactions.anomaly' | translate }}
+                  </app-status-chip>
+                } @else {
+                  <span class="muted">{{ 'common.none' | translate }}</span>
+                }
+              </td>
+              <td class="wrap desc">{{ tx.description ?? ('common.none' | translate) }}</td>
+              <td class="act">
+                <span class="row-actions">
+                  @if (tx.status === 'FAIL') {
+                    <button type="button" class="btn btn--sm btn--ghost" (click)="retry(tx.id)">
+                      {{ 'transactions.retry' | translate }}
+                    </button>
+                  }
+                  @if (isOpen(tx)) {
+                    <button type="button" class="btn btn--sm btn--ghost" (click)="cancel(tx.id)">
+                      {{ 'common.cancel' | translate }}
+                    </button>
+                  }
+                  <button
+                    type="button"
+                    class="btn btn--sm btn--ghost"
+                    (click)="confirmDelete(tx)"
+                  >
+                    {{ 'common.delete' | translate }}
+                  </button>
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="empty" colspan="10">{{ 'common.noResults' | translate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </app-data-table>
+  </app-card>
+</div>
+
+@if (composerOpen()) {
+  <app-transaction-form
+    [wallets]="wallets()"
+    [errorKey]="formError()"
+    (save)="submit($event)"
+    (cancel)="closeComposer()"
+  />
+}
+
+@if (pendingDelete(); as target) {
+  <app-confirm-dialog
+    [title]="'transactions.deleteTitle' | translate"
+    [message]="
+      'transactions.deleteConfirm'
+        | translate: { type: 'txType.' + target.type | translate, date: when(target.createdAt) }
+    "
+    [detail]="deleteDetailKey() | translate"
+    [confirmLabel]="'common.delete' | translate"
+    (confirmed)="deleteConfirmed()"
+    (cancelled)="cancelDelete()"
+  />
+}

@@ -1,0 +1,89 @@
+{
+  "id": "rep-2026-W32",
+  "userId": "3f1b2c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "periodStart": "2026-08-02",
+  "periodEnd": "2026-08-08",
+  "generatedAt": "2026-08-08T16:14:33Z",
+  "healthScore": 74,
+  "riskScore": 64,
+  "riskLevel": "MODERATE",
+  "summary": "Semaine positive : +842,30 USD sur la dernière séance et +12,81 % de plus-value latente depuis l'origine. Deux points de vigilance : une exposition crypto au-delà du seuil recommandé et un retrait inhabituel de 12 500,00 USD.",
+  "metrics": [
+    { "key": "totalValue", "label": "Valorisation totale", "value": 121145.05, "unit": "USD" },
+    { "key": "weeklyChange", "label": "Variation hebdomadaire", "value": 1837.65, "unit": "USD" },
+    { "key": "emergencyFundMonths", "label": "Fonds d'urgence", "value": 4.2, "unit": "MONTHS" },
+    { "key": "cryptoExposure", "label": "Exposition crypto", "value": 32.08, "unit": "PERCENT" }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-1",
+      "priority": "HIGH",
+      "title": "Réduire l'exposition crypto sous 20 %",
+      "detail": "Alléger la position BTC d'environ 14 600 USD ramènerait la poche crypto à 20 % du patrimoine, conformément au seuil d'alerte de la base de connaissances.",
+      "knowledgeRefId": "kb-004"
+    },
+    {
+      "id": "rec-2",
+      "priority": "HIGH",
+      "title": "Confirmer le retrait exceptionnel du 6 août",
+      "detail": "Le retrait de 12 500,00 USD dépasse de plus de 3 écarts-types la moyenne de vos retraits sur 30 jours. Vérifiez qu'il est bien à votre initiative.",
+      "knowledgeRefId": null
+    },
+    {
+      "id": "rec-3",
+      "priority": "MEDIUM",
+      "title": "Diluer les six positions au-delà de la règle des 5 %",
+      "detail": "Chacune de vos six lignes pèse plus de 5 % du patrimoine. Un ETF large marché supplémentaire réduirait le risque idiosyncratique.",
+      "knowledgeRefId": "kb-001"
+    },
+    {
+      "id": "rec-4",
+      "priority": "LOW",
+      "title": "Maintenir le fonds d'urgence en l'état",
+      "detail": "Avec 4,2 mois de dépenses couvertes, votre épargne de précaution se situe déjà dans la fourchette recommandée de 3 à 6 mois.",
+      "knowledgeRefId": "kb-005"
+    }
+  ],
+  "spendingPatterns": [
+    {
+      "id": "sp-1",
+      "label": "Retraits",
+      "periodDays": 30,
+      "totalAmount": 13850.0,
+      "transactionCount": 4,
+      "averageAmount": 3462.5,
+      "changePercent": 612.4,
+      "flagged": true
+    },
+    {
+      "id": "sp-2",
+      "label": "Dépôts",
+      "periodDays": 30,
+      "totalAmount": 9500.0,
+      "transactionCount": 4,
+      "averageAmount": 2375.0,
+      "changePercent": 8.6,
+      "flagged": false
+    },
+    {
+      "id": "sp-3",
+      "label": "Achats d'actifs",
+      "periodDays": 30,
+      "totalAmount": 11349.7,
+      "transactionCount": 5,
+      "averageAmount": 2269.94,
+      "changePercent": -4.3,
+      "flagged": false
+    },
+    {
+      "id": "sp-4",
+      "label": "Ventes d'actifs",
+      "periodDays": 30,
+      "totalAmount": 3480.95,
+      "transactionCount": 3,
+      "averageAmount": 1160.32,
+      "changePercent": 21.7,
+      "flagged": false
+    }
+  ]
+}

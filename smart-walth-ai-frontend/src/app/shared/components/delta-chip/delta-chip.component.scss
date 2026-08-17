@@ -1,0 +1,31 @@
+@use 'styles/mixins' as m;
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+
+  .value {
+    @include m.numeric;
+  }
+
+  &.up {
+    background: var(--color-positive-bg);
+    color: var(--color-positive);
+  }
+
+  &.down {
+    background: var(--color-negative-bg);
+    color: var(--color-negative);
+  }
+
+  &.flat {
+    background: var(--color-neutral-bg);
+    color: var(--color-neutral);
+  }
+}

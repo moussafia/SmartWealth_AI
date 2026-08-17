@@ -1,0 +1,62 @@
+[
+  {
+    "id": "d4f06b63-7c5e-4a4b-8d88-0e9b5f1a4c63",
+    "walletId": "a1c93e70-4f2b-4d18-9a55-7b6e2c8d1f30",
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "quantity": 120.0,
+    "avgBuyPrice": 168.4,
+    "currentPrice": 227.85,
+    "lastUpdated": "2026-08-08T16:45:00Z"
+  },
+  {
+    "id": "e5a17c74-8d6f-4b5c-9e99-1f0c6a2b5d74",
+    "walletId": "a1c93e70-4f2b-4d18-9a55-7b6e2c8d1f30",
+    "symbol": "MSFT",
+    "name": "Microsoft Corporation",
+    "quantity": 45.0,
+    "avgBuyPrice": 372.1,
+    "currentPrice": 418.6,
+    "lastUpdated": "2026-08-08T16:45:00Z"
+  },
+  {
+    "id": "f6b28d85-9e70-4c6d-8f0a-2a1d7b3c6e85",
+    "walletId": "a1c93e70-4f2b-4d18-9a55-7b6e2c8d1f30",
+    "symbol": "NVDA",
+    "name": "NVIDIA Corporation",
+    "quantity": 60.0,
+    "avgBuyPrice": 118.25,
+    "currentPrice": 104.9,
+    "lastUpdated": "2026-08-08T16:45:00Z"
+  },
+  {
+    "id": "a7c39e96-0f81-4d7e-9a1b-3b2e8c4d7f96",
+    "walletId": "a1c93e70-4f2b-4d18-9a55-7b6e2c8d1f30",
+    "symbol": "VTI",
+    "name": "Vanguard Total Stock Market ETF",
+    "quantity": 30.0,
+    "avgBuyPrice": 245.0,
+    "currentPrice": 268.4,
+    "lastUpdated": "2026-08-08T16:45:00Z"
+  },
+  {
+    "id": "b8d40fa7-1a92-4e8f-8b2c-4c3f9d5e8a07",
+    "walletId": "c3e95a52-6b4d-4f3a-9c77-9d8a4e0f3b52",
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "quantity": 0.42,
+    "avgBuyPrice": 58200.0,
+    "currentPrice": 67940.0,
+    "lastUpdated": "2026-08-08T16:52:00Z"
+  },
+  {
+    "id": "c9e51ab8-2b03-4f90-9c3d-5d4a0e6f9b18",
+    "walletId": "c3e95a52-6b4d-4f3a-9c77-9d8a4e0f3b52",
+    "symbol": "ETH",
+    "name": "Ethereum",
+    "quantity": 3.75,
+    "avgBuyPrice": 3120.0,
+    "currentPrice": 2585.4,
+    "lastUpdated": "2026-08-08T16:52:00Z"
+  }
+]

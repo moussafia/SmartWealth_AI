@@ -1,0 +1,93 @@
+@use 'styles/mixins' as m;
+
+.app-data-table {
+  width: 100%;
+  min-width: 0;
+
+  &__scroll {
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  thead th {
+    @include m.label;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 32px;
+    padding: 0 var(--space-2);
+    text-align: left;
+    white-space: nowrap;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  tbody td {
+    height: 36px;
+    padding: 0 var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background-color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-row-hover);
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  /* Keep the outer columns aligned with the surrounding card padding */
+  tr > :first-child {
+    padding-left: var(--space-4);
+  }
+
+  tr > :last-child {
+    padding-right: var(--space-4);
+  }
+
+  th.num,
+  td.num {
+    text-align: right;
+  }
+
+  td.num {
+    @include m.numeric;
+  }
+
+  td.wrap,
+  th.wrap {
+    white-space: normal;
+  }
+
+  /* Trailing column holding row-level action buttons */
+  th.act,
+  td.act {
+    width: 1%;
+    text-align: right;
+  }
+
+  td.empty {
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  &--zebra tbody tr:nth-child(even) {
+    background: var(--color-surface-raised);
+
+    &:hover {
+      background: var(--color-row-hover);
+    }
+  }
+}

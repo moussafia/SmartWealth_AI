@@ -1,0 +1,44 @@
+[
+  {
+    "id": "kb-001",
+    "category": "DIVERSIFICATION",
+    "title": "Règle des 5 %",
+    "content": "Aucune ligne individuelle ne devrait représenter plus de 5 % du patrimoine total afin de limiter le risque idiosyncratique.",
+    "source": "Principes de diversification"
+  },
+  {
+    "id": "kb-002",
+    "category": "DIVERSIFICATION",
+    "title": "Concentration sectorielle",
+    "content": "L'exposition à un même secteur d'activité devrait rester inférieure à 25 % du portefeuille actions.",
+    "source": "Principes de diversification"
+  },
+  {
+    "id": "kb-003",
+    "category": "RISK_MANAGEMENT",
+    "title": "Allocation actions / obligations selon l'âge",
+    "content": "Une allocation de référence attribue aux actions un pourcentage égal à 110 moins l'âge de l'investisseur, le solde étant placé en obligations et en épargne.",
+    "source": "Gestion du risque"
+  },
+  {
+    "id": "kb-004",
+    "category": "ALERT_THRESHOLD",
+    "title": "Seuil d'exposition crypto",
+    "content": "L'exposition aux crypto-actifs ne devrait pas dépasser 20 % du patrimoine total en raison de leur volatilité élevée.",
+    "source": "Seuils d'alerte"
+  },
+  {
+    "id": "kb-005",
+    "category": "SAVINGS",
+    "title": "Fonds d'urgence",
+    "content": "Le fonds d'urgence doit couvrir entre 3 et 6 mois de dépenses courantes, placé sur un support liquide et sans risque.",
+    "source": "Stratégies d'épargne"
+  },
+  {
+    "id": "kb-006",
+    "category": "ALERT_THRESHOLD",
+    "title": "Surconcentration sur un seul titre",
+    "content": "Une position unique dépassant 50 % du portefeuille déclenche une alerte de surconcentration critique.",
+    "source": "Seuils d'alerte"
+  }
+]

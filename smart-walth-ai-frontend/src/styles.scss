@@ -1,0 +1,257 @@
+@use 'styles/tokens';
+@use 'styles/typography';
+@use 'styles/mixins' as m;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+h1 {
+  font-size: var(--font-size-xl);
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+}
+
+h3 {
+  font-size: var(--font-size-md);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--color-info);
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+:focus-visible {
+  @include m.focus-ring;
+}
+
+/* Utilities shared across features */
+.numeric {
+  @include m.numeric;
+}
+
+.label {
+  @include m.label;
+}
+
+.muted {
+  color: var(--color-text-secondary);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* Pairs a value with its trailing chip inside a right-aligned table cell */
+.cell-pair {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-info);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #e8ecf3;
+
+    &:hover:not(:disabled) {
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+    }
+  }
+
+  /* Reserved for destructive confirmation, never for ordinary actions */
+  &--danger {
+    background: var(--color-negative-bg);
+    border-color: var(--color-negative);
+    color: var(--color-negative);
+
+    &:hover:not(:disabled) {
+      background: var(--color-negative);
+      color: var(--color-surface);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+  }
+
+  &--sm {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Row of buttons, typically in a card header or above a table */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Compact action cluster inside a dense table cell */
+.row-actions {
+  display: inline-flex;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  label {
+    @include m.label;
+    font-size: var(--font-size-xs);
+  }
+
+  input,
+  select,
+  textarea {
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    transition: border-color var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-text-muted);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  textarea {
+    min-height: 62px;
+    resize: vertical;
+  }
+
+  input[type='date'],
+  input[type='number'] {
+    @include m.numeric;
+  }
+}
+
+/* Set by app-form-field once a control is both invalid and touched */
+.field--invalid {
+  input,
+  select,
+  textarea {
+    border-color: var(--color-negative);
+  }
+}
+
+/* Two-column form body used inside modals; collapses on narrow viewports */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+
+  &__full {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Inline failure message returned by a store command */
+.form-error {
+  display: block;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-negative);
+  border-radius: var(--radius-sm);
+  background: var(--color-negative-bg);
+  color: var(--color-negative);
+  font-size: var(--font-size-sm);
+}

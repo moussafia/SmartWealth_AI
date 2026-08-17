@@ -1,0 +1,60 @@
+<div class="panel" role="dialog" [attr.aria-label]="'shell.notifications' | translate">
+  <header class="panel__head">
+    <span class="label">{{ 'shell.notifications' | translate }}</span>
+    <button
+      type="button"
+      class="panel__close"
+      [attr.aria-label]="'common.close' | translate"
+      (click)="dismiss.emit()"
+    >
+      ✕
+    </button>
+  </header>
+
+  <div class="panel__tools">
+    <button
+      type="button"
+      class="btn btn--sm btn--ghost"
+      [disabled]="unreadCount() === 0"
+      (click)="markAllRead.emit()"
+    >
+      {{ 'feed.markAllRead' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn--sm btn--ghost"
+      [disabled]="items().length === 0"
+      (click)="clearAll.emit()"
+    >
+      {{ 'feed.clearAll' | translate }}
+    </button>
+  </div>
+
+  <ul class="panel__list" aria-live="polite">
+    @for (item of items(); track item.id) {
+      <li class="item" [class.item--unread]="!item.read">
+        <div class="item__top">
+          <app-status-chip [tone]="tone(item.severity)">
+            {{ 'eventType.' + item.eventType | translate }}
+          </app-status-chip>
+          <span class="item__time">{{ when(item.createdAt) }}</span>
+        </div>
+        <strong class="item__title">{{ item.title }}</strong>
+        <p class="item__msg">{{ item.message }}</p>
+        <span class="item__meta">
+          {{ 'channel.' + item.channel | translate }} · <code>{{ item.topic }}</code>
+        </span>
+        <div class="item__actions">
+          <button type="button" class="btn btn--sm btn--ghost" (click)="toggleRead.emit(item.id)">
+            {{ (item.read ? 'feed.markUnread' : 'feed.markRead') | translate }}
+          </button>
+          <button type="button" class="btn btn--sm btn--ghost" (click)="remove.emit(item.id)">
+            {{ 'common.dismiss' | translate }}
+          </button>
+        </div>
+      </li>
+    } @empty {
+      <li class="item item--empty">{{ 'feed.empty' | translate }}</li>
+    }
+  </ul>
+</div>

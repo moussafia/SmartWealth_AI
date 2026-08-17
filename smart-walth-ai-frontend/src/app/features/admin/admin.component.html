@@ -1,0 +1,217 @@
+@if (health(); as data) {
+  <div class="page">
+    <app-page-header [title]="'admin.title' | translate" [subtitle]="'admin.subtitle' | translate">
+      <div class="toolbar">
+        <span class="stamp">{{ 'common.updated' | translate }} {{ when(data.generatedAt) }}</span>
+        <button type="button" class="btn btn--primary" (click)="refresh()">
+          {{ 'admin.refresh' | translate }}
+        </button>
+      </div>
+    </app-page-header>
+
+    <section class="tiles">
+      <app-metric-tile [label]="'admin.servicesUp' | translate" [live]="true">
+        {{ servicesUp() }}<span class="tile__max">/{{ serviceCount() }}</span>
+      </app-metric-tile>
+
+      <app-metric-tile [label]="'admin.throughput' | translate" [live]="true">
+        {{ number(throughput()) }}
+      </app-metric-tile>
+
+      <app-metric-tile [label]="'admin.totalLag' | translate">
+        {{ number(totalLag()) }}
+      </app-metric-tile>
+
+      <app-metric-tile [label]="'admin.deadLetterTotal' | translate">
+        {{ number(deadLetterTotal()) }}
+      </app-metric-tile>
+    </section>
+
+    <app-card
+      [flush]="true"
+      [heading]="'admin.services' | translate"
+      [subheading]="'admin.servicesSub' | translate"
+    >
+      <app-data-table>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'common.name' | translate }}</th>
+              <th class="wrap">{{ 'admin.responsibility' | translate }}</th>
+              <th>{{ 'admin.database' | translate }}</th>
+              <th class="num">{{ 'admin.port' | translate }}</th>
+              <th class="num">{{ 'admin.instances' | translate }}</th>
+              <th class="num">{{ 'admin.uptime' | translate }}</th>
+              <th class="num">{{ 'admin.latency' | translate }}</th>
+              <th>{{ 'admin.liveness' | translate }}</th>
+              <th>{{ 'admin.readiness' | translate }}</th>
+              <th>{{ 'common.status' | translate }}</th>
+              <th class="act">{{ 'common.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody aria-live="polite">
+            @for (service of services(); track service.id) {
+              <tr>
+                <td>{{ service.name }}</td>
+                <td class="wrap resp">{{ service.responsibility }}</td>
+                <td>{{ service.database ?? ('common.none' | translate) }}</td>
+                <td class="num">{{ service.port }}</td>
+                <td class="num">{{ service.instances }}</td>
+                <td class="num">{{ percent(service.uptimePercent) }}</td>
+                <td class="num">{{ number(service.avgLatencyMs) }} ms</td>
+                <td>
+                  <app-status-chip [tone]="service.liveness === 'PASS' ? 'positive' : 'negative'">
+                    {{ 'probe.' + service.liveness | translate }}
+                  </app-status-chip>
+                </td>
+                <td>
+                  <app-status-chip [tone]="service.readiness === 'PASS' ? 'positive' : 'negative'">
+                    {{ 'probe.' + service.readiness | translate }}
+                  </app-status-chip>
+                </td>
+                <td>
+                  <app-status-chip [tone]="statusTone(service.status)">
+                    {{ 'serviceStatus.' + service.status | translate }}
+                  </app-status-chip>
+                </td>
+                <td class="act">
+                  <button
+                    type="button"
+                    class="btn btn--sm btn--ghost"
+                    [disabled]="service.status === 'UP'"
+                    (click)="requestRestart(service)"
+                  >
+                    {{ 'admin.restart' | translate }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </app-data-table>
+    </app-card>
+
+    <section class="split">
+      <app-card
+        [flush]="true"
+        [heading]="'admin.infrastructure' | translate"
+        [subheading]="'admin.infrastructureSub' | translate"
+      >
+        <app-data-table>
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'common.name' | translate }}</th>
+                <th>{{ 'admin.technology' | translate }}</th>
+                <th class="wrap">{{ 'admin.componentRole' | translate }}</th>
+                <th>{{ 'common.status' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (component of infrastructure(); track component.id) {
+                <tr>
+                  <td>{{ component.name }}</td>
+                  <td>{{ component.technology }}</td>
+                  <td class="wrap resp">{{ component.role }}</td>
+                  <td>
+                    <app-status-chip [tone]="statusTone(component.status)">
+                      {{ 'serviceStatus.' + component.status | translate }}
+                    </app-status-chip>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </app-data-table>
+      </app-card>
+
+      <app-card
+        [flush]="true"
+        [heading]="'admin.kafka' | translate"
+        [subheading]="'admin.kafkaSub' | translate"
+      >
+        <app-data-table>
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'admin.topic' | translate }}</th>
+                <th>{{ 'admin.producer' | translate }}</th>
+                <th class="wrap">{{ 'admin.consumers' | translate }}</th>
+                <th class="num">{{ 'admin.lag' | translate }}</th>
+                <th class="num">{{ 'admin.throughput' | translate }}</th>
+                <th class="num">{{ 'admin.deadLetter' | translate }}</th>
+                <th class="act">{{ 'common.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody aria-live="polite">
+              @for (topic of kafkaTopics(); track topic.name) {
+                <tr>
+                  <td class="topic">{{ topic.name }}</td>
+                  <td>{{ topic.producer }}</td>
+                  <td class="wrap resp">{{ topic.consumers.join(', ') }}</td>
+                  <td class="num">{{ number(topic.consumerLag) }}</td>
+                  <td class="num">{{ number(topic.messagesPerMinute) }}</td>
+                  <td class="num">
+                    @if (topic.deadLetterCount > 0) {
+                      <app-status-chip tone="negative">
+                        {{ number(topic.deadLetterCount) }}
+                      </app-status-chip>
+                    } @else {
+                      {{ number(topic.deadLetterCount) }}
+                    }
+                  </td>
+                  <td class="act">
+                    <span class="row-actions">
+                      <button
+                        type="button"
+                        class="btn btn--sm btn--ghost"
+                        [disabled]="topic.consumerLag === 0"
+                        (click)="drainLag(topic)"
+                      >
+                        {{ 'admin.drainLag' | translate }}
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn--sm btn--ghost"
+                        [disabled]="topic.deadLetterCount === 0"
+                        (click)="requestReplay(topic)"
+                      >
+                        {{ 'admin.replay' | translate }}
+                      </button>
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </app-data-table>
+      </app-card>
+    </section>
+  </div>
+}
+
+@if (pendingRestart(); as target) {
+  <app-confirm-dialog
+    [title]="'admin.restartTitle' | translate"
+    [message]="'admin.restartConfirm' | translate: { name: target.name }"
+    [detail]="'admin.restartDetail' | translate"
+    [confirmLabel]="'admin.restart' | translate"
+    [destructive]="false"
+    (confirmed)="restart()"
+    (cancelled)="pendingRestart.set(null)"
+  />
+}
+
+@if (pendingReplay(); as target) {
+  <app-confirm-dialog
+    [title]="'admin.replayTitle' | translate"
+    [message]="
+      'admin.replayConfirm' | translate: { count: target.deadLetterCount, topic: target.name }
+    "
+    [detail]="'admin.replayDetail' | translate"
+    [confirmLabel]="'admin.replay' | translate"
+    [destructive]="false"
+    (confirmed)="replay()"
+    (cancelled)="pendingReplay.set(null)"
+  />
+}

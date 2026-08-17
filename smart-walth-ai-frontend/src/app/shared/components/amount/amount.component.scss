@@ -1,0 +1,15 @@
+@use 'styles/mixins' as m;
+
+.amount {
+  @include m.numeric;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+
+  &.positive {
+    color: var(--color-positive);
+  }
+
+  &.negative {
+    color: var(--color-negative);
+  }
+}

@@ -1,0 +1,21 @@
+/* Compact, data-dense type scale — see angular-finance rules §3. */
+
+:root {
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-mono: 'IBM Plex Mono', 'Roboto Mono', monospace;
+
+  --font-size-base: 13px;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-md: 13px;
+  --font-size-lg: 15px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 22px;
+
+  --line-height-tight: 1.25;
+  --line-height-base: 1.45;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+}

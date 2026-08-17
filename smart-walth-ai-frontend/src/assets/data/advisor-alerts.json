@@ -1,0 +1,54 @@
+[
+  {
+    "id": "al-001",
+    "type": "CRYPTO_EXPOSURE",
+    "severity": "HIGH",
+    "title": "Exposition crypto au-delà du seuil",
+    "message": "La poche crypto représente 32,08 % du patrimoine, contre un seuil recommandé de 20 %.",
+    "assetSymbol": "BTC",
+    "transactionId": null,
+    "thresholdPercent": 20,
+    "actualPercent": 32.08,
+    "createdAt": "2026-08-08T16:52:00Z",
+    "acknowledged": false
+  },
+  {
+    "id": "al-002",
+    "type": "ANOMALY_DETECTED",
+    "severity": "HIGH",
+    "title": "Transaction inhabituelle détectée",
+    "message": "Retrait de 12 500,00 USD le 6 août : montant supérieur à 3 écarts-types de la moyenne sur 30 jours.",
+    "assetSymbol": null,
+    "transactionId": "11a2b3c4-0004-4d5e-8f60-a1b2c3d4e504",
+    "thresholdPercent": null,
+    "actualPercent": null,
+    "createdAt": "2026-08-06T09:52:35Z",
+    "acknowledged": false
+  },
+  {
+    "id": "al-003",
+    "type": "SPENDING_PATTERN",
+    "severity": "MEDIUM",
+    "title": "Hausse marquée des retraits",
+    "message": "Vos retraits sur 30 jours progressent de 612,4 % par rapport au mois précédent.",
+    "assetSymbol": null,
+    "transactionId": null,
+    "thresholdPercent": null,
+    "actualPercent": 612.4,
+    "createdAt": "2026-08-07T06:00:00Z",
+    "acknowledged": false
+  },
+  {
+    "id": "al-004",
+    "type": "OVERCONCENTRATION",
+    "severity": "LOW",
+    "title": "Positions au-delà de la règle des 5 %",
+    "message": "Six lignes dépassent 5 % du patrimoine. Aucune n'atteint le seuil critique de 50 %.",
+    "assetSymbol": "BTC",
+    "transactionId": null,
+    "thresholdPercent": 5,
+    "actualPercent": 23.55,
+    "createdAt": "2026-08-05T06:00:00Z",
+    "acknowledged": true
+  }
+]

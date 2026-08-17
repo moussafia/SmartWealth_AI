@@ -1,0 +1,17 @@
+@use 'styles/mixins' as m;
+
+.computed {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.computed__value {
+  @include m.numeric;
+  font-size: var(--font-size-lg);
+}
