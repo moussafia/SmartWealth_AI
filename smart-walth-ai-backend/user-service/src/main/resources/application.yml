@@ -23,6 +23,9 @@ spring:
           issuer-uri: http://localhost:8181/realms/smartwealth-realm
 
 keycloak:
+  login-client:
+    client-id: smartwealth-client
+    client-secret: zieeXjJjpjp6SzKgnVC36GLFbF1HJv9B
   admin:
     server-url: http://localhost:8181
     realm: smartwealth-realm
