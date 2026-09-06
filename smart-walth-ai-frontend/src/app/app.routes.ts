@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/guards/admin.guard';
 import { ShellComponent } from './layout/shell/shell.component';
+import {authGuard} from './core/guards/auth-guard';
 
 /**
  * Route list derived from the blueprint's feature scope: F1 (login, profile),
@@ -17,6 +18,7 @@ export const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {

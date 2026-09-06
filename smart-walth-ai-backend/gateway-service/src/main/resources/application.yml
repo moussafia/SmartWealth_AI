@@ -5,6 +5,19 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:4200"   # your Angular dev origin
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
       discovery:
         locator:
           enabled: true              # Auto-discover routes from Eureka
@@ -23,6 +36,10 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/users/**,/api/auth/**
+        - id: portfolio-service
+          uri: lb://portfolio-service
+          predicates:
+            - Path=/api/wallets/**, /api/portfolios/**
       default-filters:
         - TokenRelay
   security:

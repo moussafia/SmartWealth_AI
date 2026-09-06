@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { switchMap } from 'rxjs';
 import { LanguageService } from '../../../core/services/language.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { FormFieldComponent } from '../../../shared/components/form-field/form-field.component';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
 import { StatusChipComponent } from '../../../shared/components/status-chip/status-chip.component';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MIN_PASSWORD_LENGTH = 8;
 
-/** Register and login both point at the same group; `confirm` only applies to register. */
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
   const confirm = group.get('confirm');
@@ -20,13 +22,6 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   return password === confirm.value ? null : { mismatch: true };
 }
 
-/**
- * Blueprint F1.1 — login and registration.
- *
- * There is no auth server, so credentials are validated client-side only and a
- * successful submit simply enters the shell. Registering does rewrite the stored
- * profile, so the name entered here shows up across the app.
- */
 @Component({
   selector: 'app-login',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,6 +41,8 @@ export class LoginComponent {
   private readonly themeService = inject(ThemeService);
   private readonly languageService = inject(LanguageService);
   private readonly users = inject(UserService);
+  private readonly auth = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly user = this.users.me;
   readonly isDark = this.themeService.isDark;
@@ -53,13 +50,14 @@ export class LoginComponent {
 
   readonly registering = signal(false);
   readonly submitError = signal('');
+  readonly loading = signal(false);
 
   readonly form = this.fb.nonNullable.group(
     {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      password: ['', [Validators.required]],
       confirm: [''],
     },
     { validators: passwordsMatch },
@@ -69,7 +67,7 @@ export class LoginComponent {
   private readonly mismatch = signal(false);
 
   constructor() {
-    // Prefills the demo identity so the form can be submitted as-is.
+    // Optional demo prefill — remove this effect if you don't want fields pre-filled.
     effect(() => {
       const user = this.user();
       if (!user) return;
@@ -89,16 +87,12 @@ export class LoginComponent {
     this.applyMode(next);
   }
 
-  /** Registration needs the identity fields; login does not. */
   private applyMode(registering: boolean): void {
     const { firstName, lastName, confirm } = this.form.controls;
 
     for (const control of [firstName, lastName, confirm]) {
-      if (registering) {
-        control.enable({ emitEvent: false });
-      } else {
-        control.disable({ emitEvent: false });
-      }
+      if (registering) control.enable({ emitEvent: false });
+      else control.disable({ emitEvent: false });
     }
 
     confirm.setValidators(registering ? [Validators.required] : []);
@@ -115,17 +109,47 @@ export class LoginComponent {
       return;
     }
 
-    if (this.registering()) {
-      const { firstName, lastName, email } = this.form.getRawValue();
-      const result = this.users.updateProfile({ firstName, lastName, email });
-      if (!result.ok) {
-        this.submitError.set(result.errorKey ?? 'error.generic');
-        return;
-      }
-    }
-
     this.submitError.set('');
-    void this.router.navigate(['/dashboard']);
+    this.loading.set(true);
+
+    const { firstName, lastName, email, password } = this.form.getRawValue();
+
+    // Register: create account, then log in with the same credentials.
+    // Login: log in directly.
+    const start$ = this.registering()
+      ? this.auth
+        .register({ firstName, lastName, email, password })
+        .pipe(switchMap(() => this.auth.login({ username: email, password })))
+      : this.auth.login({ username: email, password });
+
+    // Both paths finish by loading the authoritative profile from /users/me.
+    start$
+      .pipe(
+        switchMap(() => this.auth.me()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (profile) => {
+          this.loading.set(false);
+          this.users.updateProfile({
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email,
+          });
+          void this.router.navigate(['/dashboard']);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.loading.set(false);
+          this.submitError.set(this.errorKey(err));
+        },
+      });
+  }
+
+  private errorKey(err: HttpErrorResponse): string {
+    if (err.status === 401) return 'login.invalidCredentials'; // bad login
+    if (err.status === 409) return 'login.emailTaken';         // register conflict
+    if (err.status === 0) return 'error.network';              // gateway down / CORS
+    return 'error.generic';
   }
 
   toggleTheme(): void {

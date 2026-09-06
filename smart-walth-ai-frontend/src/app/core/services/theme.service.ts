@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
 
-export type Theme = 'dark' | 'light';
+export type Theme = 'dark' | 'light'; //lateral union type
 
 const STORAGE_KEY = 'smartwealth.theme';
 

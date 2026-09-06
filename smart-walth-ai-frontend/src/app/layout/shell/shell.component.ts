@@ -7,6 +7,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { UserService } from '../../core/services/user.service';
 import { IconComponent } from '../../shared/components/icon/icon.component';
 import { NotificationPanelComponent } from '../notification-panel/notification-panel.component';
+import {AuthService} from '../../core/services/auth.service';
 
 interface NavItem {
   path: string;
@@ -42,6 +43,9 @@ export class ShellComponent {
   private readonly themeService = inject(ThemeService);
   private readonly languageService = inject(LanguageService);
   private readonly users = inject(UserService);
+  private readonly auth = inject(AuthService);
+
+
   readonly notifications = inject(NotificationFeedService);
 
   readonly user = this.users.me;
@@ -73,5 +77,9 @@ export class ShellComponent {
 
   closePanel(): void {
     this.panelOpen.set(false);
+  }
+
+  logout(): void {
+    this.auth.logout();
   }
 }

@@ -78,6 +78,21 @@ services:
       # "depends_on" = start postgres-user BEFORE pgadmin.
       # pgAdmin needs the database to exist first.
 
+  postgres-portfolio:
+    image: postgres:16-alpine
+    container_name: postgres-portfolio
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portfoliodb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5433:5432"      # 5433 on your PC (5432 is taken by user DB)
+    volumes:
+      - portfolio-db-data:/var/lib/postgresql/data
+    networks:
+      - smartwealth-net
+
     # ─────────────────────────────────────────
     # PostgreSQL for Keycloak
     # ─────────────────────────────────────────
@@ -143,6 +158,7 @@ services:
 volumes:
   user-db-data:
   keycloak-db-data:
+  portfolio-db-data:
   # This creates a named volume called "user-db-data".
   # Docker stores it somewhere on your PC (you don't need to know where).
   # To delete it: "docker volume rm smart-walth-ai_user-db-data"

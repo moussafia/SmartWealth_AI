@@ -3,6 +3,7 @@ package ma.enset.userservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ma.enset.userservice.dto.LoginRequest;
+import ma.enset.userservice.dto.LogoutRequest;
 import ma.enset.userservice.dto.RefreshRequest;
 import ma.enset.userservice.dto.TokenResponse;
 import ma.enset.userservice.service.AuthService;
@@ -27,5 +28,11 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest request) {
         return ResponseEntity.ok(authService.refreshToken(request.getRefreshToken()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest request) {
+        authService.logout(request.getRefreshToken());
+        return ResponseEntity.noContent().build();   // 204
     }
 }

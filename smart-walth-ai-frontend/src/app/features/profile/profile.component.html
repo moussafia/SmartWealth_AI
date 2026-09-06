@@ -74,23 +74,6 @@
               </dd>
             </div>
             <div>
-              <dt>{{ 'profile.kycStatus' | translate }}</dt>
-              <dd class="rows__action">
-                <app-status-chip [tone]="kycStatusTone(currentUser.kycStatus)">
-                  {{ 'kyc.' + currentUser.kycStatus | translate }}
-                </app-status-chip>
-                @if (currentUser.kycStatus === 'PENDING') {
-                  <button type="button" class="btn btn--sm" (click)="requestKyc()">
-                    {{ 'profile.submitKyc' | translate }}
-                  </button>
-                } @else {
-                  <button type="button" class="btn btn--sm btn--ghost" (click)="resetKyc()">
-                    {{ 'profile.resetKyc' | translate }}
-                  </button>
-                }
-              </dd>
-            </div>
-            <div>
               <dt>{{ 'profile.memberSince' | translate }}</dt>
               <dd>{{ when(currentUser.createdAt) }}</dd>
             </div>

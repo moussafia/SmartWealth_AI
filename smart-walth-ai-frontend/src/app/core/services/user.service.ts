@@ -54,9 +54,7 @@ export class UserService {
   submitKyc(): CommandResult {
     const user = this.me();
     if (!user) return fail('error.userMissing');
-    if (user.kycStatus === 'VERIFIED') return fail('error.kycAlreadyVerified');
 
-    this.state.setUser({ ...user, kycStatus: 'VERIFIED', updatedAt: nowIso() });
     this.state.publish({
       eventType: 'USER_REGISTERED',
       topic: 'user-events',
@@ -80,12 +78,4 @@ export class UserService {
     return OK;
   }
 
-  /** Resets KYC so the verification flow can be replayed in a demo. */
-  resetKyc(): CommandResult {
-    const user = this.me();
-    if (!user) return fail('error.userMissing');
-
-    this.state.setUser({ ...user, kycStatus: 'PENDING', updatedAt: nowIso() });
-    return OK;
-  }
 }

@@ -80,4 +80,30 @@ public class AuthService {
                     "Authentication service unavailable");
         }
     }
+
+
+    public void logout(String refreshToken) {
+        String logoutUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
+
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("client_id", loginClientId);
+        form.add("client_secret", loginClientSecret);
+        form.add("refresh_token", refreshToken);
+
+        try {
+            restClient.post()
+                    .uri(logoutUrl)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(form)
+                    .retrieve()
+                    .toBodilessEntity();   // Keycloak returns 204, no body to parse
+
+        } catch (HttpClientErrorException.BadRequest | HttpClientErrorException.Unauthorized e) {
+            log.warn("Keycloak logout returned {} — token likely already invalid", e.getStatusCode());
+        } catch (Exception e) {
+            log.error("Unexpected error calling Keycloak logout endpoint", e);
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Logout service unavailable");
+        }
+    }
 }

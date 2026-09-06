@@ -80,7 +80,7 @@
         <span class="form-error" role="alert">{{ submitError() | translate }}</span>
       }
 
-      <button type="submit" class="btn btn--primary panel__submit">
+      <button type="submit" class="btn btn--primary panel__submit" [disabled]="loading()">
         {{ (registering() ? 'login.registerSubmit' : 'login.submit') | translate }}
       </button>
 

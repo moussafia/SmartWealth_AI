@@ -260,6 +260,10 @@ export class AppStateService {
   private touch(): void {
     this.updatedAtState.set(nowIso());
   }
+
+  clearUser(): void {
+    this.userState.set(null);
+  }
 }
 
 /** Stable id per alert rule, so acknowledgements survive recomputation. */

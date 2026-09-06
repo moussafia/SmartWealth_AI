@@ -1,5 +1,4 @@
 import {
-  KycStatus,
   NotificationSeverity,
   Priority,
   RiskLevel,
@@ -79,10 +78,6 @@ export function notificationSeverityTone(severity: NotificationSeverity): ChipTo
     case 'INFO':
       return 'info';
   }
-}
-
-export function kycStatusTone(status: KycStatus): ChipTone {
-  return status === 'VERIFIED' ? 'positive' : 'warning';
 }
 
 /**

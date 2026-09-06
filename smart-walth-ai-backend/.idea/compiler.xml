@@ -15,6 +15,7 @@
         <module name="security-common" />
         <module name="discovery-service" />
         <module name="gateway-service" />
+        <module name="portfolio-service" />
       </profile>
       <profile name="Annotation profile for Smart Walth ai" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -35,6 +36,7 @@
       <module name="config-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
+      <module name="portfolio-service" options="-parameters" />
       <module name="security-common" options="-parameters" />
       <module name="test-service" options="-parameters" />
       <module name="user-service" options="-parameters" />

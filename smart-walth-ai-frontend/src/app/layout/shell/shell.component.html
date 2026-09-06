@@ -22,7 +22,7 @@
       }
     </nav>
 
-    <a class="nav__link nav__link--foot" routerLink="/login">
+    <a class="nav__link nav__link--foot" (click)="logout()">
       <span class="nav__icon"><app-icon name="power" /></span>
       <span>{{ 'shell.logout' | translate }}</span>
     </a>

@@ -14,7 +14,6 @@ import { FormFieldComponent } from '../../shared/components/form-field/form-fiel
 import { IconComponent } from '../../shared/components/icon/icon.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { StatusChipComponent } from '../../shared/components/status-chip/status-chip.component';
-import { kycStatusTone } from '../../shared/util/tone.util';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -50,7 +49,6 @@ export class ProfileComponent {
 
   readonly isDark = this.themeService.isDark;
   readonly language = this.languageService.language;
-  readonly kycStatusTone = kycStatusTone;
 
   readonly editing = signal(false);
   readonly formError = signal('');
@@ -118,9 +116,6 @@ export class ProfileComponent {
     this.confirmKyc.set(false);
   }
 
-  resetKyc(): void {
-    this.users.resetKyc();
-  }
 
   /** Blueprint F1.3 — switching role re-evaluates the admin route guard. */
   toggleRole(): void {
