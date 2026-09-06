@@ -5,19 +5,6 @@ spring:
     name: gateway-service
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost:4200"   # your Angular dev origin
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: "*"
-            allowCredentials: true
       discovery:
         locator:
           enabled: true              # Auto-discover routes from Eureka
@@ -40,20 +27,8 @@ spring:
           uri: lb://portfolio-service
           predicates:
             - Path=/api/wallets/**, /api/portfolios/**
-      default-filters:
-        - TokenRelay
   security:
     oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: smartwealth-client
-            client-secret: zieeXjJjpjp6SzKgnVC36GLFbF1HJv9B
-            authorization-grant-type: authorization_code
-            scope: openid, profile, email
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8181/realms/smartwealth-realm
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8181/realms/smartwealth-realm

@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
   input,
@@ -9,11 +8,11 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Asset, AssetDraft, Wallet } from '../../../models';
+import { AddAssetFormValue, WalletDto } from '../../../core/models/wallet.model';
 import { FormFieldComponent } from '../../../shared/components/form-field/form-field.component';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 
-/** Blueprint F2.2 — add or edit a holding, including its average buy price. */
+/** Blueprint F2.2 — add a holding. The backend fetches its live price. */
 @Component({
   selector: 'app-asset-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,13 +22,12 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
 export class AssetFormComponent {
   private readonly fb = inject(FormBuilder);
 
-  readonly wallets = input.required<Wallet[]>();
+  readonly wallets = input.required<WalletDto[]>();
   /** Preselected wallet when adding from a wallet card. */
   readonly walletId = input<string>('');
-  readonly asset = input<Asset | null>(null);
   readonly errorKey = input<string>('');
 
-  readonly save = output<AssetDraft>();
+  readonly save = output<AddAssetFormValue>();
   readonly cancel = output<void>();
 
   readonly form = this.fb.nonNullable.group({
@@ -38,29 +36,14 @@ export class AssetFormComponent {
     name: ['', [Validators.required, Validators.maxLength(100)]],
     quantity: [0, [Validators.required, Validators.min(0.000001)]],
     avgBuyPrice: [0, [Validators.required, Validators.min(0.01)]],
-    currentPrice: [null as number | null],
   });
 
-  readonly isEdit = computed(() => this.asset() !== null);
-
   constructor() {
+    // Preselect a wallet when the form opens.
     effect(() => {
-      const existing = this.asset();
-      if (existing) {
-        this.form.setValue({
-          walletId: existing.walletId,
-          symbol: existing.symbol,
-          name: existing.name,
-          quantity: existing.quantity,
-          avgBuyPrice: existing.avgBuyPrice,
-          currentPrice: existing.currentPrice,
-        });
-        return;
-      }
-
       const preselected = this.walletId() || this.wallets()[0]?.id;
       if (preselected) {
-        this.form.controls.walletId.setValue(preselected);
+        this.form.controls.walletId.setValue(preselected, { emitEvent: false });
       }
     });
   }
@@ -70,14 +53,13 @@ export class AssetFormComponent {
       this.form.markAllAsTouched();
       return;
     }
-
-    const value = this.form.getRawValue();
+    const v = this.form.getRawValue();
     this.save.emit({
-      ...value,
-      currentPrice:
-        value.currentPrice === null || Number.isNaN(value.currentPrice)
-          ? null
-          : Number(value.currentPrice),
+      walletId: v.walletId,
+      symbol: v.symbol,
+      name: v.name,
+      quantity: v.quantity,
+      buyPrice: v.avgBuyPrice,   // API expects `buyPrice`
     });
   }
 }

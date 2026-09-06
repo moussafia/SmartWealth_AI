@@ -1,3 +1,4 @@
+<!--
 <div class="page">
   <app-page-header
     [title]="'dashboard.title' | translate"
@@ -8,7 +9,7 @@
       <button type="button" class="btn" (click)="refreshPrices()">
         {{ 'portfolio.refreshPrices' | translate }}
       </button>
-      <button type="button" class="btn btn--primary" (click)="goToTransactions()">
+      <button type="button" class="btn btn&#45;&#45;primary" (click)="goToTransactions()">
         {{ 'transactions.newTransaction' | translate }}
       </button>
     </div>
@@ -81,7 +82,7 @@
           <button
             type="button"
             class="range__btn"
-            [class.range__btn--active]="range() === months"
+            [class.range__btn&#45;&#45;active]="range() === months"
             [attr.aria-pressed]="range() === months"
             (click)="setRange(months)"
           >
@@ -134,7 +135,7 @@
     </app-card>
 
     <app-card [heading]="'dashboard.alerts' | translate" [subheading]="'dashboard.alertsSub' | translate">
-      <button type="button" class="btn btn--sm btn--ghost" cardActions (click)="goToAdvisor()">
+      <button type="button" class="btn btn&#45;&#45;sm btn&#45;&#45;ghost" cardActions (click)="goToAdvisor()">
         {{ 'dashboard.seeAdvisor' | translate }}
       </button>
 
@@ -151,7 +152,7 @@
             <p class="muted">{{ alert.message }}</p>
             <button
               type="button"
-              class="btn btn--sm btn--ghost"
+              class="btn btn&#45;&#45;sm btn&#45;&#45;ghost"
               (click)="acknowledge(alert.id)"
             >
               {{ 'advisor.acknowledge' | translate }}
@@ -166,7 +167,7 @@
     <app-card [heading]="'dashboard.feed' | translate" [subheading]="'dashboard.feedSub' | translate">
       <ul class="feed" aria-live="polite">
         @for (item of latestNotifications(); track item.id) {
-          <li class="feed__item" [class.feed__item--unread]="!item.read">
+          <li class="feed__item" [class.feed__item&#45;&#45;unread]="!item.read">
             <div class="feed__top">
               <app-status-chip [tone]="severityTone(item.severity)">
                 {{ 'eventType.' + item.eventType | translate }}
@@ -176,7 +177,7 @@
             <strong>{{ item.title }}</strong>
             <p class="muted">{{ item.message }}</p>
             @if (!item.read) {
-              <button type="button" class="btn btn--sm btn--ghost" (click)="markRead(item.id)">
+              <button type="button" class="btn btn&#45;&#45;sm btn&#45;&#45;ghost" (click)="markRead(item.id)">
                 {{ 'feed.markRead' | translate }}
               </button>
             }
@@ -193,7 +194,7 @@
     [heading]="'dashboard.recentTransactions' | translate"
     [subheading]="'dashboard.recentTransactionsSub' | translate"
   >
-    <button type="button" class="btn btn--sm btn--ghost" cardActions (click)="goToTransactions()">
+    <button type="button" class="btn btn&#45;&#45;sm btn&#45;&#45;ghost" cardActions (click)="goToTransactions()">
       {{ 'dashboard.seeAll' | translate }}
     </button>
 
@@ -239,3 +240,4 @@
     </app-data-table>
   </app-card>
 </div>
+-->

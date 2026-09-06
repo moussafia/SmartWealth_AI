@@ -251,12 +251,12 @@
 </div>
 
 @if (composerOpen()) {
-  <app-transaction-form
-    [wallets]="wallets()"
-    [errorKey]="formError()"
-    (save)="submit($event)"
-    (cancel)="closeComposer()"
-  />
+<!--  <app-transaction-form-->
+<!--    [wallets]="wallets()"-->
+<!--    [errorKey]="formError()"-->
+<!--    (save)="submit($event)"-->
+<!--    (cancel)="closeComposer()"-->
+<!--  />-->
 }
 
 @if (pendingDelete(); as target) {

@@ -1,5 +1,5 @@
 <app-modal
-  [title]="(isEdit() ? 'portfolio.editWallet' : 'portfolio.addWallet') | translate"
+  [title]="'portfolio.addWallet' | translate"
   [subtitle]="'portfolio.walletFormSub' | translate"
   [closeLabel]="'common.cancel' | translate"
   (dismissed)="cancel.emit()"
@@ -33,16 +33,6 @@
         }
       </select>
     </app-form-field>
-
-    <app-form-field
-      class="form-grid__full"
-      for="w-balance"
-      [label]="'common.cash' | translate"
-      [control]="form.controls.balance"
-      [hint]="'portfolio.balanceHint' | translate"
-    >
-      <input id="w-balance" type="number" min="0" step="10" formControlName="balance" />
-    </app-form-field>
   </form>
 
   @if (errorKey()) {
@@ -53,6 +43,6 @@
     {{ 'common.cancel' | translate }}
   </button>
   <button type="button" class="btn btn--primary" modalActions (click)="submit()">
-    {{ (isEdit() ? 'common.save' : 'common.create') | translate }}
+    {{ 'common.create' | translate }}
   </button>
 </app-modal>

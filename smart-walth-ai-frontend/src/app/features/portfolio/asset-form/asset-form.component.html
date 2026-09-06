@@ -1,5 +1,5 @@
 <app-modal
-  [title]="(isEdit() ? 'portfolio.editAsset' : 'portfolio.addAsset') | translate"
+  [title]="'portfolio.addAsset' | translate"
   [subtitle]="'portfolio.assetFormSub' | translate"
   [closeLabel]="'common.cancel' | translate"
   (dismissed)="cancel.emit()"
@@ -40,22 +40,12 @@
     </app-form-field>
 
     <app-form-field
+      class="form-grid__full"
       for="a-avg"
       [label]="'common.avgPrice' | translate"
       [control]="form.controls.avgBuyPrice"
     >
       <input id="a-avg" type="number" min="0" step="0.01" formControlName="avgBuyPrice" />
-    </app-form-field>
-
-    <app-form-field
-      class="form-grid__full"
-      for="a-current"
-      [label]="'common.currentPrice' | translate"
-      [control]="form.controls.currentPrice"
-      [optional]="true"
-      [hint]="'portfolio.currentPriceHint' | translate"
-    >
-      <input id="a-current" type="number" min="0" step="0.01" formControlName="currentPrice" />
     </app-form-field>
   </form>
 
@@ -67,6 +57,6 @@
     {{ 'common.cancel' | translate }}
   </button>
   <button type="button" class="btn btn--primary" modalActions (click)="submit()">
-    {{ (isEdit() ? 'common.save' : 'common.add') | translate }}
+    {{ 'common.add' | translate }}
   </button>
 </app-modal>

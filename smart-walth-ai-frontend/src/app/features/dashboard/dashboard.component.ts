@@ -49,7 +49,7 @@ type Range = (typeof RANGES)[number];
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  private readonly language = inject(LanguageService);
+ /* private readonly language = inject(LanguageService);
   private readonly router = inject(Router);
   private readonly portfolio = inject(PortfolioService);
   private readonly advisor = inject(AdvisorService);
@@ -68,7 +68,7 @@ export class DashboardComponent {
   readonly severityTone = notificationSeverityTone;
 
   readonly ranges = RANGES;
-  /** Blueprint F5.2 — the evolution chart window is user-selectable. */
+  /!** Blueprint F5.2 — the evolution chart window is user-selectable. *!/
   readonly range = signal<Range>(12);
 
   readonly recentTransactions = computed(() =>
@@ -130,7 +130,7 @@ export class DashboardComponent {
     this.range.set(range);
   }
 
-  /** Triage straight from the dashboard, without leaving for the advisor page. */
+  /!** Triage straight from the dashboard, without leaving for the advisor page. *!/
   acknowledge(id: string): void {
     this.advisor.acknowledge(id);
   }
@@ -161,5 +161,5 @@ export class DashboardComponent {
 
   private locale(): string {
     return this.language.locale;
-  }
+  }*/
 }

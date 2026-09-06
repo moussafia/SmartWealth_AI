@@ -21,6 +21,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 import { StatusChipComponent } from '../../shared/components/status-chip/status-chip.component';
 import { transactionStatusTone, transactionTypeTone } from '../../shared/util/tone.util';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
+import {sign} from 'chart.js/helpers';
 
 const EMPTY_FILTERS: TransactionFilters = {
   type: 'ALL',
@@ -62,7 +63,9 @@ export class TransactionsComponent {
 
   readonly all = this.transactions.all;
   readonly wallets = this.portfolio.wallets;
-  readonly currency = this.portfolio.currency;
+ // readonly currency = this.portfolio.currency;
+  readonly currency = signal<string>("0");
+
 
   readonly filters = signal<TransactionFilters>(EMPTY_FILTERS);
   readonly search = signal('');
@@ -258,7 +261,8 @@ export class TransactionsComponent {
   }
 
   walletName(walletId: string): string {
-    return this.portfolio.walletName(walletId);
+    //return this.portfolio.walletName(walletId);
+    return "ffff";
   }
 
   quantity(value: number): string {

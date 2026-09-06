@@ -171,7 +171,8 @@ export class AdvisorComponent {
     const locale = this.language.locale;
     switch (metric.unit) {
       case 'USD':
-        return formatMoney(metric.value, locale, this.portfolio.currency());
+        return "0";
+        //return formatMoney(metric.value, locale, this.portfolio.currency());
       case 'PERCENT':
         return formatPercent(metric.value, locale);
       case 'MONTHS':
@@ -180,7 +181,8 @@ export class AdvisorComponent {
   }
 
   money(value: number): string {
-    return formatMoney(value, this.language.locale, this.portfolio.currency());
+  //  return formatMoney(value, this.language.locale, this.portfolio.currency());
+    return "0";
   }
 
   seconds(durationMs: number): string {

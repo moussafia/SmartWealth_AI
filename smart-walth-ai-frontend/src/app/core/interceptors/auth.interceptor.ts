@@ -7,6 +7,8 @@ import { AuthService } from '../services/auth.service';
 const AUTH_FREE = ['/auth/login', '/auth/refresh', '/users/register',  '/auth/logout'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+
+  console.log('[authInterceptor]', req.method, req.url);
   const auth = inject(AuthService);
 
   const isApiCall = req.url.includes('/api/');
