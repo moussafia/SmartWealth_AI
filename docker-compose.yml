@@ -150,6 +150,51 @@ services:
     networks:
       - smartwealth-net
 
+  # ─────────────────────────────────────────
+  # Kafka — the message broker
+  # ─────────────────────────────────────────
+  # Kafka is where events are published and read from.
+  # Transaction Service PUBLISHES here; Portfolio Service READS from here.
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"      # your PC → Kafka (apps running in IDE connect here)
+    environment:
+      # KRaft mode = no Zookeeper needed (modern Kafka)
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:29093,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    networks:
+      - smartwealth-net
+
+  # ─────────────────────────────────────────
+  # Kafka UI — visual dashboard (optional but great for learning)
+  # ─────────────────────────────────────────
+  # Open http://localhost:8090 to SEE topics and messages live.
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: unless-stopped
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: smartwealth
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    depends_on:
+      - kafka
+    networks:
+      - smartwealth-net
+
 # ─────────────────────────────────────────
 # Volumes — Where data lives on your hard drive
 # ─────────────────────────────────────────

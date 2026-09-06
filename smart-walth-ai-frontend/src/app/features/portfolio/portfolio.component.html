@@ -32,87 +32,66 @@
 
   <section class="wallets">
     @if (wallets().length) {
-      <div class="switcher">
-        <div class="field">
-          <label for="wallet-picker">{{ 'portfolio.selectWallet' | translate }}</label>
-          <select
-            id="wallet-picker"
-            [value]="selected()?.id ?? ''"
-            (change)="selectWallet($event)"
-          >
-            @for (wallet of wallets(); track wallet.id) {
-              <option [value]="wallet.id">
-                {{ wallet.name }} · {{ 'walletType.' + wallet.type | translate }}
-              </option>
-            }
-          </select>
-        </div>
-        <p class="switcher__meta">
-          {{ 'portfolio.walletCount' | translate: { count: wallets().length } }}
-        </p>
-      </div>
-    }
-
-    @if (selected(); as wallet) {
-      <app-card
-        [flush]="true"
-        [heading]="wallet.name"
-        [subheading]="wallet.currency + ' · ' + when(wallet.createdAt)"
-      >
-        <div class="toolbar" cardActions>
-          <app-status-chip tone="info">
-            {{ 'walletType.' + wallet.type | translate }}
-          </app-status-chip>
-          <button type="button" class="btn btn--sm" (click)="openAssetForm(wallet.id)">
-            {{ 'portfolio.addAsset' | translate }}
-          </button>
-        </div>
-
-        <dl class="wallet__stats">
-          <div>
-            <dt>{{ 'common.marketValue' | translate }}</dt>
-            <dd><app-amount [value]="wallet.totalValue" [currency]="wallet.currency" /></dd>
+      @for (wallet of wallets(); track wallet.id) {
+        <app-card
+          [flush]="true"
+          [heading]="wallet.name"
+          [subheading]="wallet.currency + ' · ' + when(wallet.createdAt)"
+        >
+          <div class="toolbar" cardActions>
+            <app-status-chip tone="info">
+              {{ 'walletType.' + wallet.type | translate }}
+            </app-status-chip>
+            <button type="button" class="btn btn--sm" (click)="openAssetForm(wallet.id)">
+              {{ 'portfolio.addAsset' | translate }}
+            </button>
           </div>
-          <div>
-            <dt>{{ 'common.cash' | translate }}</dt>
-            <dd><app-amount [value]="wallet.balance" [currency]="wallet.currency" /></dd>
-          </div>
-          <div>
-            <dt>{{ 'portfolio.holdings' | translate }}</dt>
-            <dd>{{ wallet.assetCount }}</dd>
-          </div>
-        </dl>
 
-        @if (wallet.assets.length) {
-          <app-data-table>
-            <table>
-              <thead>
-              <tr>
-                <th>{{ 'common.symbol' | translate }}</th>
-                <th class="wrap">{{ 'common.asset' | translate }}</th>
-                <th class="num">{{ 'common.quantity' | translate }}</th>
-                <th class="num">{{ 'common.avgPrice' | translate }}</th>
-                <th class="num">{{ 'common.currentPrice' | translate }}</th>
-                <th class="num">{{ 'common.marketValue' | translate }}</th>
-                <th class="num">{{ 'common.gainLoss' | translate }}</th>
-              </tr>
-              </thead>
-              <tbody>
-                @for (position of wallet.assets; track position.id) {
-                  <tr>
-                    <td class="sym">{{ position.symbol }}</td>
-                    <td class="wrap">{{ position.name }}</td>
-                    <td class="num">{{ quantity(position.quantity) }}</td>
-                    <td class="num">
-                      <app-amount [value]="position.avgBuyPrice" [currency]="wallet.currency" />
-                    </td>
-                    <td class="num">
-                      <app-amount [value]="position.currentPrice" [currency]="wallet.currency" />
-                    </td>
-                    <td class="num">
-                      <app-amount [value]="position.totalValue" [currency]="wallet.currency" />
-                    </td>
-                    <td class="num">
+          <dl class="wallet__stats">
+            <div>
+              <dt>{{ 'common.marketValue' | translate }}</dt>
+              <dd><app-amount [value]="wallet.totalValue" [currency]="wallet.currency" /></dd>
+            </div>
+            <div>
+              <dt>{{ 'common.cash' | translate }}</dt>
+              <dd><app-amount [value]="wallet.balance" [currency]="wallet.currency" /></dd>
+            </div>
+            <div>
+              <dt>{{ 'portfolio.holdings' | translate }}</dt>
+              <dd>{{ wallet.assetCount }}</dd>
+            </div>
+          </dl>
+
+          @if (wallet.assets.length) {
+            <app-data-table>
+              <table>
+                <thead>
+                <tr>
+                  <th>{{ 'common.symbol' | translate }}</th>
+                  <th class="wrap">{{ 'common.asset' | translate }}</th>
+                  <th class="num">{{ 'common.quantity' | translate }}</th>
+                  <th class="num">{{ 'common.avgPrice' | translate }}</th>
+                  <th class="num">{{ 'common.currentPrice' | translate }}</th>
+                  <th class="num">{{ 'common.marketValue' | translate }}</th>
+                  <th class="num">{{ 'common.gainLoss' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for (position of wallet.assets; track position.id) {
+                    <tr>
+                      <td class="sym">{{ position.symbol }}</td>
+                      <td class="wrap">{{ position.name }}</td>
+                      <td class="num">{{ quantity(position.quantity) }}</td>
+                      <td class="num">
+                        <app-amount [value]="position.avgBuyPrice" [currency]="wallet.currency" />
+                      </td>
+                      <td class="num">
+                        <app-amount [value]="position.currentPrice" [currency]="wallet.currency" />
+                      </td>
+                      <td class="num">
+                        <app-amount [value]="position.totalValue" [currency]="wallet.currency" />
+                      </td>
+                      <td class="num">
                       <span class="cell-pair">
                         <app-amount
                           [value]="position.profitLoss"
@@ -121,16 +100,17 @@
                         />
                         <app-delta-chip [value]="position.profitLossPercentage" />
                       </span>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </app-data-table>
-        } @else {
-          <p class="wallet__empty muted">{{ 'portfolio.cashOnly' | translate }}</p>
-        }
-      </app-card>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </app-data-table>
+          } @else {
+            <p class="wallet__empty muted">{{ 'portfolio.cashOnly' | translate }}</p>
+          }
+        </app-card>
+      }
     } @else {
       <app-card>
         <p class="empty-state">{{ 'portfolio.noWallets' | translate }}</p>
