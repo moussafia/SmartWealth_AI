@@ -10,11 +10,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="transaction-service" />
         <module name="config-service" />
         <module name="security-common" />
-        <module name="discovery-service" />
         <module name="gateway-service" />
+        <module name="advisor-service" />
+        <module name="transaction-service" />
+        <module name="discovery-service" />
         <module name="portfolio-service" />
       </profile>
       <profile name="Annotation profile for Smart Walth ai" enabled="true">
@@ -40,6 +41,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="advisor-service" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
