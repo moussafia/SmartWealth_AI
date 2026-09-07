@@ -99,6 +99,21 @@ services:
     # Keycloak needs its own database to store realms, clients, users,
     # roles, and sessions. Following the same "database-per-service"
     # pattern you already used for postgres-user.
+  postgres-transaction:
+    image: postgres:16-alpine
+    container_name: postgres-transaction
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: transactiondb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5434:5432"      # 5432 = user, 5433 = portfolio, 5434 = transaction
+    volumes:
+      - transaction-db-data:/var/lib/postgresql/data
+    networks:
+      - smartwealth-net
+
   postgres-keycloak:
     image: postgres:16-alpine
     container_name: postgres-keycloak
@@ -204,6 +219,7 @@ volumes:
   user-db-data:
   keycloak-db-data:
   portfolio-db-data:
+  transaction-db-data:
   # This creates a named volume called "user-db-data".
   # Docker stores it somewhere on your PC (you don't need to know where).
   # To delete it: "docker volume rm smart-walth-ai_user-db-data"

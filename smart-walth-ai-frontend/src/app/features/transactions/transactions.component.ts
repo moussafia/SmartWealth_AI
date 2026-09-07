@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageService } from '../../core/services/language.service';
 import { PortfolioService } from '../../core/services/portfolio.service';
@@ -6,12 +16,12 @@ import { TransactionService } from '../../core/services/transaction.service';
 import { formatDateTime, formatQuantity } from '../../core/util/format.util';
 import { sum } from '../../core/util/portfolio.util';
 import {
-  Transaction,
-  TransactionDraft,
+  CreateTransactionRequest,
+  TransactionDto,
   TransactionFilters,
   TransactionStatus,
   TransactionType,
-} from '../../models';
+} from '../../core/models/transaction.model';
 import { AmountComponent } from '../../shared/components/amount/amount.component';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -21,7 +31,6 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 import { StatusChipComponent } from '../../shared/components/status-chip/status-chip.component';
 import { transactionStatusTone, transactionTypeTone } from '../../shared/util/tone.util';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
-import {sign} from 'chart.js/helpers';
 
 const EMPTY_FILTERS: TransactionFilters = {
   type: 'ALL',
@@ -56,16 +65,17 @@ type SortDirection = 'asc' | 'desc';
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss',
 })
-export class TransactionsComponent {
+export class TransactionsComponent implements OnInit {
   private readonly language = inject(LanguageService);
   private readonly transactions = inject(TransactionService);
   private readonly portfolio = inject(PortfolioService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly all = this.transactions.all;
   readonly wallets = this.portfolio.wallets;
- // readonly currency = this.portfolio.currency;
-  readonly currency = signal<string>("0");
 
+  /** Currency comes from the first wallet; defaults to USD if none loaded yet. */
+  readonly currency = computed(() => this.wallets()[0]?.currency ?? 'USD');
 
   readonly filters = signal<TransactionFilters>(EMPTY_FILTERS);
   readonly search = signal('');
@@ -73,7 +83,7 @@ export class TransactionsComponent {
   readonly sortDirection = signal<SortDirection>('desc');
 
   readonly composerOpen = signal(false);
-  readonly pendingDelete = signal<Transaction | null>(null);
+  readonly pendingDelete = signal<TransactionDto | null>(null);
   readonly formError = signal('');
 
   readonly types: readonly TransactionType[] = ['DEPOSIT', 'WITHDRAW', 'BUY', 'SELL'];
@@ -82,6 +92,11 @@ export class TransactionsComponent {
   readonly statusTone = transactionStatusTone;
   readonly typeTone = transactionTypeTone;
 
+  ngOnInit(): void {
+    this.portfolio.refresh();
+    this.transactions.refresh();
+  }
+
   /** Blueprint F3.3 — type, status, wallet, date range, amount range and anomalies. */
   private readonly matching = computed(() => {
     const f = this.filters();
@@ -89,7 +104,7 @@ export class TransactionsComponent {
 
     return this.all().filter((tx) => {
       if (f.type !== 'ALL' && tx.type !== f.type) return false;
-      if (f.status !== 'ALL' && tx.status !== f.status) return false;
+      if (f.status !== 'ALL' && (tx.status ?? 'DONE') !== f.status) return false;
       if (f.walletId !== 'ALL' && tx.walletId !== f.walletId) return false;
       if (f.anomaliesOnly && !tx.isAnomaly) return false;
       if (f.from && tx.createdAt.slice(0, 10) < f.from) return false;
@@ -103,7 +118,7 @@ export class TransactionsComponent {
           tx.description ?? '',
           this.walletName(tx.walletId),
           this.language.instant(`txType.${tx.type}`),
-          this.language.instant(`txStatus.${tx.status}`),
+          this.language.instant(`txStatus.${tx.status ?? 'DONE'}`),
         ]
           .join(' ')
           .toLowerCase();
@@ -117,7 +132,6 @@ export class TransactionsComponent {
   readonly filtered = computed(() => {
     const key = this.sortKey();
     const factor = this.sortDirection() === 'asc' ? 1 : -1;
-
     return [...this.matching()].sort((a, b) => factor * this.compare(a, b, key));
   });
 
@@ -157,7 +171,6 @@ export class TransactionsComponent {
     this.search.set('');
   }
 
-  /** Clicking the active column flips direction; a new column starts descending. */
   sortBy(key: SortKey): void {
     if (this.sortKey() === key) {
       this.sortDirection.update((direction) => (direction === 'asc' ? 'desc' : 'asc'));
@@ -189,13 +202,27 @@ export class TransactionsComponent {
     this.formError.set('');
   }
 
-  submit(draft: TransactionDraft): void {
-    const result = this.transactions.create(draft);
-    if (result.ok) {
-      this.closeComposer();
-      return;
-    }
-    this.formError.set(result.errorKey ?? 'error.generic');
+  submit(draft: CreateTransactionRequest): void {
+    this.transactions
+      .create({
+        walletId: draft.walletId,
+        type: draft.type,
+        amount: draft.amount,
+        assetSymbol: draft.assetSymbol ?? null,
+        assetName: draft.assetName ?? null,
+        quantity: draft.quantity ?? null,
+        unitPrice: draft.unitPrice ?? null,
+        description: draft.description ?? null,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.closeComposer();
+          this.transactions.refresh();
+        },
+        error: (err: HttpErrorResponse) =>
+          this.formError.set(err.status === 400 ? 'error.invalidInput' : 'error.generic'),
+      });
   }
 
   retry(id: string): void {
@@ -206,7 +233,7 @@ export class TransactionsComponent {
     this.transactions.cancel(id);
   }
 
-  confirmDelete(transaction: Transaction): void {
+  confirmDelete(transaction: TransactionDto): void {
     this.pendingDelete.set(transaction);
   }
 
@@ -221,11 +248,11 @@ export class TransactionsComponent {
     this.pendingDelete.set(null);
   }
 
-  isSettled(transaction: Transaction): boolean {
+  isSettled(transaction: TransactionDto): boolean {
     return transaction.status === 'DONE';
   }
 
-  isOpen(transaction: Transaction): boolean {
+  isOpen(transaction: TransactionDto): boolean {
     return transaction.status === 'PENDING' || transaction.status === 'PROCESSING';
   }
 
@@ -260,9 +287,9 @@ export class TransactionsComponent {
     this.search.set((event.target as HTMLInputElement).value);
   }
 
+  /** Resolve the real wallet name from its id (fixes the old "ffff" placeholder). */
   walletName(walletId: string): string {
-    //return this.portfolio.walletName(walletId);
-    return "ffff";
+    return this.wallets().find((w) => w.id === walletId)?.name ?? walletId;
   }
 
   quantity(value: number): string {
@@ -273,14 +300,14 @@ export class TransactionsComponent {
     return formatDateTime(value, this.language.locale);
   }
 
-  private compare(a: Transaction, b: Transaction, key: SortKey): number {
+  private compare(a: TransactionDto, b: TransactionDto, key: SortKey): number {
     switch (key) {
       case 'amount':
         return a.amount - b.amount;
       case 'type':
         return a.type.localeCompare(b.type);
       case 'status':
-        return a.status.localeCompare(b.status);
+        return (a.status ?? 'DONE').localeCompare(b.status ?? 'DONE');
       case 'createdAt':
         return a.createdAt.localeCompare(b.createdAt);
     }

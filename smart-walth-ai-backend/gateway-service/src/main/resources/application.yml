@@ -27,6 +27,10 @@ spring:
           uri: lb://portfolio-service
           predicates:
             - Path=/api/wallets/**, /api/portfolios/**
+        - id: transaction-service
+          uri: lb://transaction-service
+          predicates:
+            - Path=/api/transactions/**
   security:
     oauth2:
       resourceserver:

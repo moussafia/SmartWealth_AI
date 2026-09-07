@@ -112,9 +112,9 @@ export class AdminService {
     });
 
     if (topicName === 'transaction-events') {
-      for (const transaction of this.transactions.failed()) {
-        this.transactions.retry(transaction.id);
-      }
+     // for (const transaction of this.transactions.failed()) {
+     //   this.transactions.retry(transaction.id);
+    //  }
     }
 
     this.state.publish({

@@ -14,7 +14,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { formatMoney, formatQuantity } from '../../../core/util/format.util';
-import { TransactionDraft, TransactionType, Wallet } from '../../../models';
+import { CreateTransactionRequest, TransactionType } from '../../../core/models/transaction.model';
+import { WalletDto } from '../../../core/models/wallet.model';
 import { FormFieldComponent } from '../../../shared/components/form-field/form-field.component';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 
@@ -33,10 +34,10 @@ export class TransactionFormComponent {
   private readonly transactions = inject(TransactionService);
   private readonly language = inject(LanguageService);
 
-  readonly wallets = input.required<Wallet[]>();
+  readonly wallets = input.required<WalletDto[]>();
   readonly errorKey = input<string>('');
 
-  readonly save = output<TransactionDraft>();
+  readonly save = output<CreateTransactionRequest>();
   readonly cancel = output<void>();
 
   readonly types = TYPES;
@@ -52,7 +53,6 @@ export class TransactionFormComponent {
     description: [''],
   });
 
-  /** Mirrors the form so the template can react without a pipe on every field. */
   private readonly value = signal(this.form.getRawValue());
 
   readonly isTrade = computed(() => this.value().type === 'BUY' || this.value().type === 'SELL');
@@ -61,7 +61,6 @@ export class TransactionFormComponent {
     this.wallets().find((wallet) => wallet.id === this.value().walletId),
   );
 
-  /** Trade amount is always quantity × unit price, never typed directly. */
   readonly tradeAmount = computed(() => {
     const { quantity, unitPrice } = this.value();
     return round(quantity * unitPrice);
@@ -84,7 +83,6 @@ export class TransactionFormComponent {
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.value.set(this.form.getRawValue()));
 
-    // Inputs are only bound after construction, hence the effect.
     effect(() => {
       if (this.form.controls.walletId.value) return;
       const first = this.wallets()[0]?.id;
@@ -94,7 +92,6 @@ export class TransactionFormComponent {
     this.applyTypeRules('DEPOSIT');
   }
 
-  /** Adds or drops the trade-only validators as the type changes. */
   private applyTypeRules(type: TransactionType): void {
     const { assetSymbol, assetName, quantity, unitPrice, amount } = this.form.controls;
     const trade = type === 'BUY' || type === 'SELL';
@@ -126,10 +123,10 @@ export class TransactionFormComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.save.emit(this.toDraft());
+    this.save.emit(this.toRequest());
   }
 
-  private toDraft(): TransactionDraft {
+  private toRequest(): CreateTransactionRequest {
     const value = this.form.getRawValue();
     const trade = value.type === 'BUY' || value.type === 'SELL';
 

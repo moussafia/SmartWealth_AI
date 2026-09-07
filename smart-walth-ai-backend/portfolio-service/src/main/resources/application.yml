@@ -22,7 +22,19 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8181/realms/smartwealth-realm
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: portfolio-service          # the consumer group (interview term!)
+      auto-offset-reset: earliest          # read from start if no offset yet
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.use.type.headers: false
+        spring.json.trusted.packages: "*"                        # trust incoming types
+        spring.json.value.default.type: ma.enset.portfolioservice.event.TransactionEvent
 eureka:
   client:
     service-url:

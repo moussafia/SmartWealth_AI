@@ -199,11 +199,11 @@
               <td>{{ walletName(tx.walletId) }}</td>
               <td class="sym">{{ tx.assetSymbol ?? ('common.none' | translate) }}</td>
               <td class="num">
-                {{ tx.quantity !== null ? quantity(tx.quantity) : ('common.none' | translate) }}
+                {{ tx.quantity !== null ? quantity(tx.quantity ?? 0) : ('common.none' | translate) }}
               </td>
               <td class="num"><app-amount [value]="tx.amount" [currency]="currency()" /></td>
               <td>
-                <app-status-chip [tone]="statusTone(tx.status)">
+                <app-status-chip [tone]="statusTone(tx.status  ?? 'DONE')">
                   {{ 'txStatus.' + tx.status | translate }}
                 </app-status-chip>
               </td>
@@ -251,12 +251,12 @@
 </div>
 
 @if (composerOpen()) {
-<!--  <app-transaction-form-->
-<!--    [wallets]="wallets()"-->
-<!--    [errorKey]="formError()"-->
-<!--    (save)="submit($event)"-->
-<!--    (cancel)="closeComposer()"-->
-<!--  />-->
+  <app-transaction-form
+    [wallets]="wallets()"
+    [errorKey]="formError()"
+    (save)="submit($event)"
+    (cancel)="closeComposer()"
+  />
 }
 
 @if (pendingDelete(); as target) {

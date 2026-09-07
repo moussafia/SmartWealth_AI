@@ -39,6 +39,7 @@
         <module>user-service</module>
         <module>security-common</module>
         <module>portfolio-service</module>
+        <module>transaction-service</module>
     </modules>
 
     <!-- ===== DEPENDENCY MANAGEMENT ===== -->
