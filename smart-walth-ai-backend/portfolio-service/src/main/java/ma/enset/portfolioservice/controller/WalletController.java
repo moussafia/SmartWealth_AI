@@ -3,6 +3,7 @@ package ma.enset.portfolioservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ma.enset.portfolioservice.dto.*;
+import ma.enset.portfolioservice.entity.Wallet;
 import ma.enset.portfolioservice.service.WalletService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,5 +63,14 @@ public class WalletController {
         UUID userId = UUID.fromString(jwt.getSubject());
         walletService.deleteWallet(id, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/balance")
+    public ResponseEntity<BigDecimal> getBalance(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        Wallet wallet = walletService.getWalletEntity(id, userId); // voir ci-dessous
+        return ResponseEntity.ok(wallet.getBalance() == null ? BigDecimal.ZERO : wallet.getBalance());
     }
 }

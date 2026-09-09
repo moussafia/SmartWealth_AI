@@ -98,9 +98,15 @@ public class WalletService {
                 .build();
     }
 
+    public Wallet getWalletEntity(UUID walletId, UUID userId) {
+        return findWalletOrThrow(walletId, userId);
+    }
+
     private Wallet findWalletOrThrow(UUID walletId, UUID userId) {
         return walletRepository.findByIdAndUserId(walletId, userId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Wallet not found"));
     }
+
+
 }

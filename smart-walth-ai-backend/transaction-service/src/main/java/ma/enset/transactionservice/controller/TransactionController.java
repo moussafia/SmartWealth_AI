@@ -26,8 +26,9 @@ public class TransactionController {
             @Valid @RequestBody CreateTransactionRequest request,
             @AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return new ResponseEntity<>(service.create(request, userId), HttpStatus.CREATED);
-    }
+        return new ResponseEntity<>(
+                service.create(request, userId, jwt.getTokenValue()),
+                HttpStatus.CREATED);    }
 
     @GetMapping
     public ResponseEntity<List<TransactionDto>> myTransactions(

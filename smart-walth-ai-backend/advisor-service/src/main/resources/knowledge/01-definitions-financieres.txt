@@ -1,0 +1,19 @@
+DÉFINITIONS FINANCIÈRES — SMARTWEALTH AI
+
+Diversification
+La diversification consiste à répartir ses investissements sur plusieurs actifs différents (cryptomonnaies, actions, épargne) afin de réduire le risque global. Le principe est simple : ne pas mettre tous ses œufs dans le même panier. Si un actif chute, les autres peuvent compenser la perte. Un portefeuille bien diversifié est moins exposé aux mouvements brutaux d'un seul actif.
+
+Volatilité
+La volatilité mesure l'ampleur des variations de prix d'un actif sur une période donnée. Un actif très volatil, comme la plupart des cryptomonnaies, peut gagner ou perdre une grande partie de sa valeur en peu de temps. Une volatilité élevée signifie un risque élevé, mais aussi un potentiel de gain élevé. L'épargne classique a une volatilité très faible.
+
+Plus-value et moins-value
+La plus-value est le gain réalisé lorsque la valeur actuelle d'un actif dépasse son prix d'achat. La moins-value est la perte lorsque la valeur actuelle est inférieure au prix d'achat. Elle se calcule ainsi : (prix actuel moins prix moyen d'achat) multiplié par la quantité détenue.
+
+Prix moyen d'achat
+Le prix moyen d'achat est le prix payé pour une unité d'un actif. Si l'on achète en plusieurs fois à des prix différents, on calcule la moyenne pondérée. Par exemple, acheter 0,001 BTC pour 70 dollars au total correspond à un prix moyen de 70 000 dollars pour un BTC entier.
+
+Valorisation
+La valorisation d'un actif est sa valeur de marché actuelle, calculée en multipliant le prix actuel par la quantité détenue. La valorisation d'un portefeuille est la somme des valorisations de tous les actifs qu'il contient.
+
+Liquidités
+Les liquidités représentent l'argent disponible immédiatement dans un portefeuille, non investi dans des actifs. Elles servent à réaliser de nouveaux achats ou à effectuer des retraits.

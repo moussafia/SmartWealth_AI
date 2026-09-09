@@ -42,7 +42,13 @@ public class TransactionConsumer {
 
         switch (event.getType()) {
             case "DEPOSIT" -> wallet.setBalance(balance.add(event.getAmount()));
-            case "WITHDRAW" -> wallet.setBalance(balance.subtract(event.getAmount()));
+            case "WITHDRAW" -> {
+                if (balance.compareTo(event.getAmount()) < 0) {
+                    log.warn("Retrait refusé : solde {} < montant {}", balance, event.getAmount());
+                    return; // on ne soustrait pas
+                }
+                wallet.setBalance(balance.subtract(event.getAmount()));
+            }
             default -> log.warn("Unknown transaction type: {}", event.getType());
         }
 

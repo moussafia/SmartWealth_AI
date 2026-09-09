@@ -72,6 +72,7 @@ public class Wallet {
         }
         return assets.stream()
                 .map(a -> a.getCurrentPrice().multiply(a.getQuantity()))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .add(balance == null ? BigDecimal.ZERO : balance);
     }
 }
