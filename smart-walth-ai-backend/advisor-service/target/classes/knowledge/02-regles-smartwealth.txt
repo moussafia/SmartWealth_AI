@@ -1,0 +1,19 @@
+RÈGLES ET POLITIQUES SMARTWEALTH AI
+
+Politique de risque
+SmartWealth évalue le risque d'un portefeuille selon la part investie en cryptomonnaies. Un portefeuille dont plus de 50 pour cent de la valeur est en crypto est considéré comme à risque élevé. Entre 20 et 50 pour cent, le risque est modéré. En dessous de 20 pour cent, le risque est faible. Le score de risque va de 0 (sûr) à 100 (très risqué).
+
+Recommandations de diversification
+SmartWealth recommande à ses utilisateurs de ne pas concentrer plus de la moitié de leur patrimoine sur un seul actif. Pour un profil prudent, il est conseillé de conserver une part importante en épargne et en actions stables. Pour réduire le risque, répartir les investissements sur plusieurs classes d'actifs.
+
+Types de portefeuilles
+SmartWealth propose trois types de portefeuilles. Le portefeuille CRYPTO contient des cryptomonnaies et présente une volatilité élevée. Le portefeuille STOCKS contient des actions, avec un risque modéré. Le portefeuille SAVINGS (épargne) contient des liquidités, avec un risque très faible.
+
+Règles sur les transactions
+Un dépôt (DEPOSIT) augmente les liquidités du portefeuille et est toujours autorisé. Un retrait (WITHDRAW) diminue les liquidités et ne peut jamais dépasser le solde disponible du portefeuille. Un achat d'actif (BUY) et une vente (SELL) modifient les positions détenues.
+
+Actualisation des prix
+Les prix des actifs sont récupérés depuis une source de marché externe et actualisés automatiquement toutes les 5 minutes. La valorisation affichée peut donc présenter un léger décalage par rapport au marché en temps réel.
+
+Conseils prudents
+SmartWealth rappelle que tout investissement comporte un risque de perte. Les cryptomonnaies sont particulièrement volatiles et ne doivent représenter qu'une part maîtrisée du patrimoine. Il est conseillé de n'investir que des sommes que l'on peut se permettre de perdre.
