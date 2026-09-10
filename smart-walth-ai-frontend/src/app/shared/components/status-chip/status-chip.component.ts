@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-export type ChipTone = 'positive' | 'negative' | 'warning' | 'info' | 'neutral' | 'accent';
+export type ChipTone = 'positive' | 'negative' | 'warning' | 'info' | 'neutral' | 'accent' | 'success';
 
 /** Pill-shaped status label. Tone maps onto the semantic `-bg` / solid token pair. */
 @Component({
