@@ -4,54 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9821130-869d-4906-ab41-6b5b972d1db3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/controller/PortfolioController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/controller/WalletController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/dto/AddAssetRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/dto/AssetDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/dto/CreateWalletRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/dto/PortfolioSummaryDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/dto/WalletDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/entity/Asset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/entity/Wallet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/enums/AssetType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/enums/WalletType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/mapper/WalletMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/repository/AssetRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/repository/WalletRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/service/PriceService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smart-walth-ai-backend/portfolio-service/src/main/java/ma/enset/portfolioservice/service/WalletService.java" afterDir="false" />
+    <list default="true" id="e9821130-869d-4906-ab41-6b5b972d1db3" name="Changes" comment="fix merge conflict">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/gateway-service/src/test/java/ma/enset/enset/gatewayservice/GatewayServiceApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/security-common/target/security-common-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-backend/security-common/target/security-common-0.0.1-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/HELP.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/main/java/ma/enset/security/enset/testservice/TestController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/main/java/ma/enset/security/enset/testservice/TestServiceApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/src/test/java/ma/enset/security/enset/testservice/TestServiceApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/classes/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/classes/ma/enset/security/enset/testservice/TestController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/classes/ma/enset/security/enset/testservice/TestServiceApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/test-service-0.0.1-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-walth-ai-backend/test-service/target/test-service-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-walth-ai-frontend/src/app/features/auth/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/smart-walth-ai-frontend/src/app/features/auth/login/login.component.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,12 +30,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/STATE/Desktop/smart-walth-ai",
+    "last_opened_file_path": "C:/Users/STATE/Desktop/smart-walth-ai/smart-walth-ai-backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\STATE\\Desktop\\smart-walth-ai\\smart-walth-ai-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -114,10 +70,25 @@
       <workItem from="1785441644240" duration="7348000" />
       <workItem from="1786951064802" duration="6505000" />
       <workItem from="1787303848916" duration="8000" />
+      <workItem from="1788731872248" duration="11348000" />
+      <workItem from="1789212153179" duration="2490000" />
     </task>
+    <task id="LOCAL-00001" summary="fix merge conflict">
+      <option name="closed" value="true" />
+      <created>1788992258732</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1788992258732</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix merge conflict" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix merge conflict" />
   </component>
 </project>
