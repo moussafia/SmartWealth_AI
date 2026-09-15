@@ -136,15 +136,16 @@ ng serve --proxy-config proxy.conf.json
 
 <pre>
 smartwealth-ai/
+├── smart-walth-ai-backend/
+  ├── eureka-server/
+  ├── gateway-service/
+  ├── user-service/
+  ├── portfolio-service/
+  ├── transaction-service/
+  ├── advisor-service/
+  │   └── src/main/resources/knowledge/   (documents RAG)
 ├── docker-compose.yml
-├── eureka-server/
-├── gateway-service/
-├── user-service/
-├── portfolio-service/
-├── transaction-service/
-├── advisor-service/
-│   └── src/main/resources/knowledge/   (documents RAG)
-└── frontend/
+└── smart-walth-ai-frontend/
 </pre>
 
 <hr>
