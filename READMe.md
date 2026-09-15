@@ -138,7 +138,8 @@ ng serve --proxy-config proxy.conf.json
 smartwealth-ai/
 ├── docker-compose.yml
 ├── smart-walth-ai-backend/
-  └── eureka-server/
+  └── discovery-service/
+  ├── config-service/
   ├── gateway-service/
   ├── user-service/
   ├── portfolio-service/
